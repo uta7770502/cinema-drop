@@ -47,3 +47,5 @@ function smartRank(mood){let taste=tasteWords(),bad=profile.avoid||[];return sma
 function applySmartDrop(mood){let x=smartRank(mood)[0];$("title").textContent=x.title;$("meta").textContent=x.meta;$("match").textContent=x.score+"%";$("reason").textContent=(profile.favorites?.length?profile.favorites[0]+"などの好みから。":"今の気分から。")+x.reason;if(x.poster)posterMap[x.title]=x.poster;applyRealPoster();let note=document.querySelector(".today .taste-note");if(!note){note=document.createElement("p");note.className="taste-note";$("reason").after(note)}note.textContent=(profile.favorites?.length?profile.favorites.length+"作品の好み":"気分")+" ＋ "+(profile.avoid?.length?profile.avoid.length+"件の苦手条件":"苦手条件なし")+" から選定"}
 document.querySelectorAll(".chips button").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>applySmartDrop(b.textContent),0)));
 window.addEventListener("DOMContentLoaded",()=>setTimeout(()=>{if(profile.complete)applySmartDrop("")},50));
+
+async function tmdbSearch(q){try{let r=await fetch("/api/search?q="+encodeURIComponent(q));if(!r.ok)return[];let d=await r.json();return d.results||[]}catch(e){return[]}}
