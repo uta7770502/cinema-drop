@@ -23,7 +23,21 @@
   if(page==="mypage")sub.innerHTML='<div class="sub-head"><small>YOUR PROFILE</small><h2>マイページ</h2><p>CINEMA DROPが覚えている、あなたの映画の好み。</p></div><div class="profile-block"><small>好きな作品</small><p>'+((p.favorites||[]).join("・")||"未登録")+'</p></div><div class="profile-block"><small>苦手</small><p>'+((p.avoid||[]).join("・")||"未登録")+'</p></div><div class="profile-block"><small>観る環境</small><p>'+((p.services||[]).join("・")||"未登録")+'</p></div><button id="safeEdit" class="edit-profile">好みを編集する →</button>';
   window.scrollTo(0,0);
   if(page==="mypage"&&$("safeEdit"))$("safeEdit").onclick=()=>{safeStep=1;$("home").classList.add("hidden");$("setup").classList.remove("hidden");drawSetup()};
-  if(page==="search"&&typeof window.initConcierge==="function")try{window.initConcierge()}catch(e){}
+  if(page==="search"){
+    let q=$("conciergeQuery"),out=$("conciergeResults");
+    async function safeSearch(term){
+      term=(term||"").trim();if(!term)return;
+      out.innerHTML='<div class="empty-card"><b>AI CONCIERGE</b><h3>あなたに合う3本を探しています…</h3><p>今の気分から候補を選定中。</p></div>';
+      let map={"90分以内":"コメディ","映像がすごい":"SF","泣ける":"ドラマ","サスペンス":"サスペンス"},query=map[term]||term;
+      try{
+        let r=await fetch("/api/search?q="+encodeURIComponent(query)),d=await r.json(),items=(d.results||[]).filter(x=>x.type==="movie").slice(0,3);
+        out.innerHTML=items.length?'<div class="concierge-caption">AI CONCIERGEが選んだ3本</div>'+items.map((x,n)=>'<button class="concierge-card" data-title="'+String(x.title).replace(/"/g,"&quot;")+'"><span class="concierge-poster" '+(x.poster?'style="background-image:url('+x.poster+')"':'')+'></span><span><small>0'+(n+1)+' · RECOMMEND</small><b>'+x.title+'</b><em>'+((x.date||"").slice(0,4))+(x.rating?' · ★ '+Number(x.rating).toFixed(1):'')+'</em><p>'+(x.overview||"今の気分に合う候補です。').slice(0,70)+'</p></span><i>→</i></button>').join(""):'<div class="empty-card"><h3>候補が見つかりませんでした。</h3><p>別の言葉で試してください。</p></div>';
+        out.querySelectorAll(".concierge-card").forEach((b,n)=>b.onclick=()=>{let x=items[n];fallbackPage("home");$("title").textContent=x.title;$("meta").textContent=((x.date||"").slice(0,4))+" · Movie";$("reason").textContent=x.overview||"今の気分に合う一本です。";if(x.poster)$("poster").style.background='url("'+x.poster+'") center/cover no-repeat';document.querySelector(".today")?.scrollIntoView({behavior:"smooth"})});
+      }catch(err){out.innerHTML='<div class="empty-card"><h3>検索できませんでした。</h3><p>少し時間をおいてもう一度お試しください。</p></div>'}
+    }
+    document.querySelectorAll(".discover-tags button").forEach(b=>b.onclick=()=>{q.value=b.textContent;safeSearch(b.textContent)});
+    if(q){let t;q.oninput=()=>{clearTimeout(t);t=setTimeout(()=>safeSearch(q.value),500)}}
+  }
  }
  $("startBtn")?.addEventListener("click",()=>{safeStep=1;$("welcome").classList.add("hidden");$("home").classList.add("hidden");$("setup").classList.remove("hidden");drawSetup()});
  $("skipBtn")?.addEventListener("click",()=>{$("welcome").classList.add("hidden");$("setup").classList.add("hidden");$("home").classList.remove("hidden");fallbackPage("home")});
