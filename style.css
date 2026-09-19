@@ -4,3 +4,21 @@
 .work-results .work-cover{width:42px;height:58px;flex:none;overflow:hidden;border-radius:7px;background:#e8dfd3}.work-results .work-cover img{width:100%;height:100%;object-fit:cover;display:block}.detail-hero{background-size:cover;background-position:center 28%}
 .result-message{padding:20px 8px;text-align:center;font-size:10px;color:#999;line-height:1.6}.work-tabs button{cursor:pointer}.work-tabs button.selected{background:#222!important;color:#fff!important;border-color:#222!important}
 .loader{display:inline-block;width:10px;height:10px;border:1px solid #ccc;border-top-color:#e25b52;border-radius:50%;margin-right:7px;vertical-align:-1px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+/* CINEMA DROP candy-tin hero */
+.candy-hero{position:relative;isolation:isolate}
+.candy-hero .ticket{display:none}
+.drop-tin{position:absolute;left:51%;top:48%;width:148px;height:166px;transform:translate(-50%,-50%) rotate(-8deg);border-radius:12px 12px 16px 16px;background:#e85e57;border:3px solid #d9bd82;box-shadow:0 15px 24px rgba(74,48,31,.14),inset 8px 0 10px rgba(255,255,255,.08),inset -8px 0 12px rgba(128,38,32,.09);z-index:3}
+.drop-tin:before,.drop-tin:after{content:"";position:absolute;left:-3px;right:-3px;height:5px;background:#d9bd82}
+.drop-tin:before{top:0;border-radius:12px 12px 3px 3px}.drop-tin:after{bottom:0;border-radius:3px 3px 12px 12px}
+.tin-top{position:absolute;left:-2px;top:-12px;width:149px;height:29px;border-radius:50%;background:#c9aa6e;border:3px solid #ead7a8;transform:skewX(-7deg);box-shadow:inset 0 5px 8px rgba(82,59,30,.28)}
+.tin-top:after{content:"";position:absolute;left:13px;top:7px;width:31px;height:14px;border-radius:50%;background:#6b4d2d;border:3px solid #e5cf9d}
+.tin-label{position:absolute;left:-3px;right:-3px;top:58px;height:72px;background:#f7e8b5;color:#bd3f37;text-align:center;display:flex;flex-direction:column;justify-content:center;line-height:1}
+.tin-label small{font-family:Georgia,serif;font-size:12px;letter-spacing:3px}.tin-label b{font-family:Georgia,serif;font-size:31px;margin:3px 0}.tin-label em{font-family:Georgia,serif;font-style:normal;font-size:6px;line-height:1.15}
+.film-drops{position:absolute;inset:0;z-index:4}.candy{position:absolute;width:43px;height:31px;border-radius:50%;box-shadow:0 8px 11px rgba(66,42,31,.13),inset 0 3px 4px rgba(255,255,255,.55);transform:rotate(-13deg);border:2px solid rgba(255,255,255,.34)}
+.candy b{position:absolute;left:12px;top:8px;width:19px;height:13px;border:2px solid rgba(255,255,255,.9);box-sizing:border-box}
+.candy b:before,.candy b:after{content:"";position:absolute;top:-2px;width:3px;height:13px;border-top:2px dotted rgba(255,255,255,.95);border-bottom:2px dotted rgba(255,255,255,.95)}
+.candy b:before{left:-7px}.candy b:after{right:-7px}
+.c1{background:#f06061;left:23%;top:29%}.c2{background:#5fb4e9;left:18%;top:43%}.c3{background:#f6c83f;left:13%;top:57%}.c4{background:#f28b3e;left:21%;top:70%}.c5{background:#b25ac4;left:8%;top:78%}
+.candy-hero:hover .c1{animation:candyRoll 1.7s ease-in-out infinite alternate}.candy-hero:hover .c2{animation:candyRoll 1.9s .12s ease-in-out infinite alternate}.candy-hero:hover .c3{animation:candyRoll 2.1s .2s ease-in-out infinite alternate}
+@keyframes candyRoll{to{transform:translate(-5px,7px) rotate(12deg)}}
+@media(max-width:420px){.drop-tin{width:132px;height:151px}.tin-top{width:133px}.tin-label{top:53px;height:66px}.tin-label b{font-size:28px}.candy{width:39px;height:28px}.candy b{left:11px;top:7px;width:17px;height:12px}.c1{left:24%;top:28%}.c2{left:18%;top:42%}.c3{left:13%;top:56%}.c4{left:21%;top:69%}.c5{left:8%;top:77%}}
