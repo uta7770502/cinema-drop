@@ -1,14 +1,24 @@
 <!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f8f5ee"><title>CINEMA DROP.</title><link rel="stylesheet" href="style.css"></head><body>
 <section id="welcome" class="welcome"><div class="welcome-inner"><header class="welcome-head"><div class="brand">CINEMA DROP<span>.</span></div><span class="login login-soon">BETA</span></header><div class="welcome-art candy-hero"><img class="cinema-drop-hero-img" src="cinema-drop-hero.jpg" alt="CINEMA DROP キャンディ缶"></div><p class="eyebrow">YOUR PERSONAL CINEMA CONCIERGE</p><h1>映画の好みを教えてください。</h1><p class="welcome-lead">好きな映画、苦手な映画、今使っている配信サービス。<br>CINEMA DROPがあなたを知るほど、<br>次の一本はもっとあなたらしくなります。</p><div class="mini-flow"><div><b>01</b><span>好きな映画</span></div><i></i><div><b>02</b><span>好み・気分</span></div><i></i><div><b>03</b><span>観る環境</span></div></div><button id="startBtn" class="primary start">好みを登録してはじめる <b>→</b></button><button id="skipBtn" class="skip">まずは試してみる</button><p class="note">登録は約1分。あとからいつでも変更できます。</p></div></section>
 <section id="setup" class="setup hidden"><div class="setup-inner"><div class="setup-top"><button id="backBtn">←</button><div class="progress"><i id="progressBar"></i></div><small id="stepNo">1 / 3</small></div><div id="stepContent"></div><button id="nextBtn" class="primary">次へ <b>→</b></button></div></section>
-<main id="home" class="app hidden"><header><div class="brand">CINEMA DROP<span>.</span></div><span class="menu menu-static">CINEMA DROP</span></header><section class="rec-zone"><div id="recHero" class="rec-hero"><button id="recPrev" class="rec-arrow left">‹</button><div class="rec-shade"></div><div class="rec-copy"><small>今日のおすすめ</small><h1 id="recTitle">あなたへの一本</h1><p id="recOverview">好みから、今観たい映画を選んでいます。</p><div id="recTags" class="rec-tags"><span>AI PICK</span></div><button id="recDetail" class="rec-watch">▶　作品を見る</button></div><button id="recNext" class="rec-arrow right">›</button><span id="recCount" class="rec-count">1 / 5</span></div><div id="recDots" class="rec-dots"></div></section><section class="hero hero-copy"><p class="eyebrow">YOUR CINEMA CONCIERGE</p><h1>今日、どんな映画に<br>出会いますか？</h1><p class="lead">気分と好みから、あなたの「今観たい一本」を選びます。</p><button id="heroRecommend" class="hero-recommend">今のおすすめを見る <b>↓</b></button></section><section class="moods"><div class="mood-head"><h2>今日の気分</h2><button id="moodReset">気分を選び直す ↻</button></div><div class="chips mood-grid">
-<button data-mood="コメディ"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span>元気になりたい</span></button>
+<main id="home" class="app hidden">
+<header class="new-head"><div><div class="brand stacked">CINEMA<br>DROP<span>.</span></div><small>いい映画が、ここから落ちてくる。</small></div><div class="head-tools"><span class="head-search">⌕</span><span class="avatar-dot"></span></div></header>
+<section class="editorial-hero">
+ <div class="hero-text"><h1>きっと、<br>この時間が<br>好きになる。</h1><p>あなたの映画の好みから<br>今の気分にぴったりの一本を。</p><button id="heroRecommend" class="editorial-cta">▶　今のおすすめをみる</button><div class="editorial-dots"><i></i><i></i><i></i></div></div>
+ <div class="hero-scene"><div class="projection">Good<br>films,<br>A better you.</div><div class="chair-person">●</div><div class="cat-shape">●</div><div class="book-stack">MOVIES<br>PEOPLE<br>PLACES<br>AND YOU</div></div>
+</section>
+<section class="moods editorial-section"><div class="section-head"><div><h2>今日の気分からさがす</h2><p>今の気分にぴったりの映画を、AIがセレクト。</p></div><button id="moodReset">すべて見る　›</button></div><div class="chips mood-grid">
 <button data-mood="ドラマ"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6a5.5 5.5 0 0 0 1-8.8z"/></svg><span>泣きたい</span></button>
-<button data-mood="ヒューマンドラマ"><svg viewBox="0 0 24 24"><path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 11h18v7H3zM6 18v2M18 18v2"/></svg><span>ゆっくりしたい</span></button>
-<button data-mood="アドベンチャー"><svg viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg><span>ワクワクしたい</span></button>
-<button data-mood="ミステリー"><svg viewBox="0 0 24 24"><path d="M19 15.5A8 8 0 0 1 8.5 5a8.5 8.5 0 1 0 10.5 10.5z"/></svg><span>考えたい</span></button>
-<button data-mood="アニメ"><svg viewBox="0 0 24 24"><path d="M4 8h16v11H4zM4 8l3-4M9 8l3-4M14 8l3-4M19 8l1-2"/><path d="M9 13h6"/></svg><span>なんでもいい</span></button>
-</div></section><section class="today"><div class="section-title"><div><small>PICK UP</small><h2>あなたへの候補</h2></div></div><div id="pickupRow" class="pickup-row"></div></section><section id="subpage" class="subpage hidden"></section><nav>
+<button data-mood="コメディ"><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5-1.8A5 5 0 0 0 7 18z"/></svg><span>何も考えたくない</span></button>
+<button data-mood="ファミリー"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span>元気が出る</span></button>
+<button data-mood="ミステリー"><svg viewBox="0 0 24 24"><path d="M19 15.5A8 8 0 0 1 8.5 5a8.5 8.5 0 1 0 10.5 10.5z"/></svg><span>じっくり観たい</span></button>
+<button data-mood="ヒューマンドラマ"><svg viewBox="0 0 24 24"><path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 11h18v7H3z"/></svg><span>家でまったり</span></button>
+<button data-mood="アニメ"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c.5-5 3-7 6-7s5.5 2 6 7M10 20c.5-4 2.5-6 6-6s5.5 2 6 6"/></svg><span>みんなで観たい</span></button>
+</div></section>
+<section class="recommend-section editorial-section"><div class="section-head"><div><h2>あなたへのおすすめ</h2><p>好きな映画から見つけた、今観るべき一本。</p></div><button id="allRecommend">すべて見る　›</button></div><div id="pickupRow" class="poster-strip"></div></section>
+<section class="coming-section editorial-section"><div class="section-head"><div><h2>もうすぐ始まる注目作品</h2><p>劇場で、配信で。見逃せない作品をチェック。</p></div><button>すべて見る　›</button></div><button id="comingCard" class="coming-card"><div class="coming-visual"></div><div><span>注目作品</span><small>COMING SOON</small><b id="comingTitle">INTERSTELLAR</b><em>あなたへのおすすめからピックアップ</em></div><i>›</i></button></section>
+<section id="subpage" class="subpage hidden"></section>
+<nav>
 <button class="active" data-page="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H5V11"/><path d="M9 21v-6h6v6"/></svg><span>ホーム</span></button>
 <button data-page="search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><span>さがす</span></button>
 <button class="dropnav" id="dropNav"><i></i><span>DROP</span></button>
@@ -49,18 +59,16 @@
  function applyMovie(x){currentMovie=x;renderRec()}
  function renderRec(){
   let x=recItems[recIndex]||currentMovie;if(!x)return;currentMovie=x;
-  if($("recTitle"))$("recTitle").textContent=x.title;
-  if($("recOverview"))$("recOverview").textContent=(x.overview||personalizedReason(x)).slice(0,75);
-  if($("recHero")&&x.backdrop)$("recHero").style.backgroundImage='url("'+x.backdrop+'")';
-  if($("recCount"))$("recCount").textContent=(recIndex+1)+" / "+recItems.length;
-  if($("recDots"))$("recDots").innerHTML=recItems.map((_,i)=>'<i class="'+(i===recIndex?'active':'')+'"></i>').join("");
-  if($("pickupRow"))$("pickupRow").innerHTML=recItems.map((m,i)=>'<button data-i="'+i+'" class="pickup-card">'+(m.poster?'<img src="'+m.poster+'" alt="">':'<span></span>')+'<b>'+m.title+'</b></button>').join("");
-  $("pickupRow")?.querySelectorAll("button").forEach(b=>b.onclick=()=>{recIndex=+b.dataset.i;renderRec();document.querySelector(".rec-zone")?.scrollIntoView({behavior:"smooth"})});
+  if($("pickupRow"))$("pickupRow").innerHTML=recItems.map((m,i)=>'<button data-i="'+i+'" class="poster-card">'+(m.poster?'<img src="'+m.poster+'" alt="">':'<span></span>')+'<b>'+m.title+'</b><small>'+((m.date||"").slice(0,4))+(m.rating?'　★'+Number(m.rating).toFixed(1):'')+'</small></button>').join("");
+  $("pickupRow")?.querySelectorAll("button").forEach(b=>b.onclick=()=>{recIndex=+b.dataset.i;currentMovie=recItems[recIndex];openCurrentDetail()});
+  if($("comingTitle"))$("comingTitle").textContent=x.title;
+  if($("comingCard")&&x.backdrop)$("comingCard").style.setProperty("--coming-bg",'url("'+x.backdrop+'")');
  }
+ function openCurrentDetail(){if(!currentMovie)return;$("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);$("detail").classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0)}
  async function recommendForProfile(q){
    try{let term=q||profileQuery(),r=await fetch("/api/search?q="+encodeURIComponent(term)),d=await r.json(),items=(d.results||[]).filter(x=>x.type==="movie"&&x.poster).slice(0,5);let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}");let bad=Object.keys(hist).filter(k=>hist[k].reaction==="bad");recItems=items.filter(m=>!bad.includes(m.title)).slice(0,5);recIndex=0;if(recItems.length){currentMovie=recItems[0];renderRec()}}catch(e){}
  }
- function homeSections(on){[".rec-zone",".hero",".moods",".today"].forEach(q=>{let e=document.querySelector(q);if(e)e.style.display=on?"":"none"})}
+ function homeSections(on){[".editorial-hero",".moods",".recommend-section",".coming-section"].forEach(q=>{let e=document.querySelector(q);if(e)e.style.display=on?"":"none"})}
  function fallbackPage(page){
   let sub=$("subpage");if(!sub)return;
   document.querySelectorAll("nav button[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
@@ -104,11 +112,9 @@
  document.querySelectorAll("#reactionChoices button").forEach(b=>b.addEventListener("click",()=>{let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}");hist[$("detailTitle").textContent]={reaction:b.dataset.reaction,date:new Date().toISOString()};localStorage.setItem("cinemaDropHistory",JSON.stringify(hist));setTimeout(recommendForProfile,50);document.querySelectorAll("#reactionChoices button").forEach(x=>x.classList.toggle("selected",x===b));$("reactionSaved")?.classList.remove("hidden")},true));
  document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));let p=$("watchPanel");if(p&&!p.innerHTML.trim())p.innerHTML='<div class="provider-row"><span><b>視聴方法を確認中</b></span></div>'},true));
  $("dropNav")?.addEventListener("click",()=>{fallbackPage("home");setTimeout(()=>document.querySelector(".today")?.scrollIntoView({behavior:"smooth"}),30)},true);
- $("heroRecommend")?.addEventListener("click",()=>document.querySelector(".rec-zone")?.scrollIntoView({behavior:"smooth"}));
- $("recPrev")?.addEventListener("click",()=>{if(!recItems.length)return;recIndex=(recIndex-1+recItems.length)%recItems.length;renderRec()});
- $("recNext")?.addEventListener("click",()=>{if(!recItems.length)return;recIndex=(recIndex+1)%recItems.length;renderRec()});
- $("recDetail")?.addEventListener("click",()=>{if(!currentMovie)return;$("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);$("detail").classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0)});
+ $("heroRecommend")?.addEventListener("click",()=>{if(recItems.length){recIndex=0;currentMovie=recItems[0];openCurrentDetail()}else recommendForProfile()});
  document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));recommendForProfile(b.dataset.mood)}));
+ $("comingCard")?.addEventListener("click",openCurrentDetail); $("allRecommend")?.addEventListener("click",()=>document.querySelector(".poster-strip")?.scrollIntoView({behavior:"smooth"}));
  $("moodReset")?.addEventListener("click",()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));recommendForProfile()});
 
 })();
