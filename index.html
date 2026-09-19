@@ -10,4 +10,22 @@
   if(a)a.addEventListener("click",goSetup);
   if(b)b.addEventListener("click",goHome);
 })();
-</script><script src="app.js"></script></body></html>
+</script><script src="app.js"></script><script>
+(function(){
+ var setupStep=1;
+ var setupData=[
+  '<div class="setup-copy"><small>YOUR FAVORITES</small><h2>好きだった作品を教えてください。</h2><p>映画・ドラマ・アニメ・漫画、なんでもOK。まずは3作品くらいから。</p></div><div class="work-search"><span>⌕</span><input id="safeWorkQuery" placeholder="作品名を検索　例：ゴジラ、キングダム"></div><div class="choice-grid safe-favs"><button>ゴジラ-1.0</button><button>インターステラー</button><button>PERFECT DAYS</button><button>君の名は。</button><button>進撃の巨人</button><button>チェンソーマン</button></div><p class="search-note">好きな作品を選択。検索機能もこのあと利用できます。</p>',
+  '<div class="setup-copy"><small>NOT FOR YOU</small><h2>ちょっと苦手なものは？</h2><p>おすすめから避けたい傾向を教えてください。</p></div><div class="choice-grid"><button>怖すぎる映画</button><button>残酷な描写</button><button>長い映画</button><button>重すぎる話</button><button>恋愛中心</button><button>子ども向け</button><button>特になし</button></div>',
+  '<div class="setup-copy"><small>YOUR SCREEN</small><h2>普段、どこで観ますか？</h2><p>使っている環境に合わせて「今観られる一本」を探します。</p></div><div class="choice-grid"><button>映画館</button><button>Netflix</button><button>Prime Video</button><button>U-NEXT</button><button>Disney+</button><button>Apple TV+</button><button>レンタルもOK</button><button>どこでもOK</button></div>'
+ ];
+ function drawSafe(){
+  var box=document.getElementById("stepContent"),no=document.getElementById("stepNo"),bar=document.getElementById("progressBar"),next=document.getElementById("nextBtn");
+  if(!box)return;box.innerHTML=setupData[setupStep-1];if(no)no.textContent=setupStep+" / 3";if(bar)bar.style.width=(setupStep/3*100)+"%";if(next)next.innerHTML=setupStep===3?'登録してCINEMA DROPへ <b>→</b>':'次へ <b>→</b>';
+  box.querySelectorAll(".choice-grid button").forEach(function(b){b.addEventListener("click",function(){b.classList.toggle("selected")})});
+ }
+ var start=document.getElementById("startBtn"),next=document.getElementById("nextBtn"),back=document.getElementById("backBtn");
+ if(start)start.addEventListener("click",function(){setupStep=1;setTimeout(drawSafe,0)});
+ if(next)next.addEventListener("click",function(e){if(!document.getElementById("setup")||document.getElementById("setup").classList.contains("hidden"))return;if(setupStep<3){e.stopImmediatePropagation();setupStep++;drawSafe()}else{document.getElementById("setup").classList.add("hidden");document.getElementById("home").classList.remove("hidden");window.scrollTo(0,0)}},true);
+ if(back)back.addEventListener("click",function(e){if(setupStep>1){e.stopImmediatePropagation();setupStep--;drawSafe()}},true);
+})();
+</script></body></html>
