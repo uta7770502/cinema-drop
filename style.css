@@ -112,3 +112,8 @@
  .hero-copy h1{font-size:23px!important}.hero-recommend{height:44px!important}
  .mood-grid button{height:54px!important}
 }
+
+/* Approved line icon system */
+.mood-grid button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.mood-grid button.selected svg{stroke:#ed5b50}
+nav button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}nav button.active svg{stroke:#111}nav .dropnav i{display:block;width:34px;height:34px;border-radius:50%;background:#ef584f;margin:0 auto 2px}nav .dropnav{color:#ef584f}nav button:not(.active):not(.dropnav){color:#aaa}
+@media(max-width:430px){.mood-grid button svg{width:21px;height:21px}nav button svg{width:23px;height:23px}nav .dropnav i{width:31px;height:31px}}
