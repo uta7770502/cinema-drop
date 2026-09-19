@@ -34,3 +34,16 @@ const mockWatch={
 "ゴジラ-1.0":{stream:["Prime Video"],rent:["Apple TV"],theater:["上映状況を確認"]}
 };
 function renderWatch(title){let tabs=[...document.querySelectorAll(".watch-tabs button")],panel=$("watchPanel"),data=mockWatch[title]||{stream:["配信先を確認"],rent:["レンタル先を確認"],theater:["映画館を探す"]};function draw(k){let labels=data[k]||[];panel.innerHTML=labels.map((x,n)=>'<button class="provider-row"><span><i>'+(k==="theater"?"◎":"▶")+'</i><b>'+x+'</b></span><em>'+(k==="stream"?"見放題":k==="rent"?"レンタル":"劇場情報")+'</em><strong>↗</strong></button>').join("")}tabs.forEach(b=>b.onclick=()=>{tabs.forEach(x=>x.classList.remove("selected"));b.classList.add("selected");draw(b.dataset.watch)});tabs.forEach(x=>x.classList.remove("selected"));tabs[0]?.classList.add("selected");draw("stream")}
+
+const smartDrops=[
+{title:"PERFECT DAYS",meta:"2023 · 124min · Drama",poster:"https://image.tmdb.org/t/p/w500/mjEk5Wwx6TYVqw29zSaUHclMIgp.jpg",tags:["静か","日常","人物","余韻","日本"],avoid:[],reason:"静かな日常と人物の余韻を丁寧に味わえる一本。"},
+{title:"INTERSTELLAR",meta:"2014 · 169min · Sci-Fi",poster:"https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",tags:["映像","sf","家族","壮大","映画館"],avoid:["長い映画"],reason:"壮大な映像と家族の感情を同時に味わえる一本。"},
+{title:"ゴジラ-1.0",meta:"2023 · 125min · Action / Drama",poster:"https://image.tmdb.org/t/p/w500/hkxxMIGaiCTmrEArK7J56JTKUlB.jpg",tags:["日本","映像","アクション","映画館","人物"],avoid:[],reason:"映画館らしい迫力と人間ドラマを一緒に楽しめる一本。"},
+{title:"PAST LIVES",meta:"2023 · 106min · Drama",poster:"",tags:["静か","恋愛","余韻","人物"],avoid:["恋愛中心"],reason:"会話と余韻を静かに味わいたい夜に合う一本。"},
+{title:"THE GRAND BUDAPEST HOTEL",meta:"2014 · 100min · Comedy",poster:"",tags:["気楽","映像","コメディ","短め"],avoid:[],reason:"重すぎず、画面のデザインまで楽しめる軽快な一本。"}
+];
+function tasteWords(){let s=(profile.favorites||[]).join(" ").toLowerCase(),out=[];if(/ゴジラ|godzilla|キングダム/.test(s))out.push("日本","アクション","映像");if(/インターステラー|interstellar/.test(s))out.push("sf","壮大","映像","家族");if(/perfect|国宝/.test(s))out.push("人物","日本","余韻");if(/君の名|past lives/.test(s))out.push("恋愛","余韻");if(/チェンソー|進撃|dragon|ドラゴン/.test(s))out.push("アクション","映像");return out}
+function smartRank(mood){let taste=tasteWords(),bad=profile.avoid||[];return smartDrops.map(x=>{let score=70;x.tags.forEach(t=>{if(taste.includes(t))score+=5;if(mood&&mood.includes(t))score+=7});x.avoid.forEach(a=>{if(bad.includes(a))score-=22});if(bad.includes("重すぎる話")&&x.tags.includes("人物"))score-=4;return {...x,score:Math.max(55,Math.min(99,score))}}).sort((a,b)=>b.score-a.score)}
+function applySmartDrop(mood){let x=smartRank(mood)[0];$("title").textContent=x.title;$("meta").textContent=x.meta;$("match").textContent=x.score+"%";$("reason").textContent=(profile.favorites?.length?profile.favorites[0]+"などの好みから。":"今の気分から。")+x.reason;if(x.poster)posterMap[x.title]=x.poster;applyRealPoster();let note=document.querySelector(".today .taste-note");if(!note){note=document.createElement("p");note.className="taste-note";$("reason").after(note)}note.textContent=(profile.favorites?.length?profile.favorites.length+"作品の好み":"気分")+" ＋ "+(profile.avoid?.length?profile.avoid.length+"件の苦手条件":"苦手条件なし")+" から選定"}
+document.querySelectorAll(".chips button").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>applySmartDrop(b.textContent),0)));
+window.addEventListener("DOMContentLoaded",()=>setTimeout(()=>{if(profile.complete)applySmartDrop("")},50));
