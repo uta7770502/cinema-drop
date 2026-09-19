@@ -67,3 +67,10 @@
 .concierge-loading{position:relative;overflow:hidden}
 .concierge-loading:after{content:"";display:block;width:38%;height:2px;background:#e45d55;margin-top:14px;animation:thinking 1.15s ease-in-out infinite}
 @keyframes thinking{0%{transform:translateX(-110%)}50%{transform:translateX(100%)}100%{transform:translateX(260%)}}
+.watched-box{margin:25px 0 30px;padding:22px 18px;border-radius:22px;background:#f2ede5}
+.watched-box>small{font-size:8px;letter-spacing:2px;color:#e45d55}.watched-box h3{font-family:Georgia,"Yu Mincho",serif;font-size:20px;margin:7px 0}.watched-box>p{font-size:9px;line-height:1.65;color:#888}
+.watched-btn{width:100%;border:0;border-radius:999px;background:#191919;color:#fff;padding:13px;margin-top:8px;font-size:11px;font-weight:700}
+.reaction-choices{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.reaction-choices button{border:1px solid #d9d0c5;background:#fffaf4;border-radius:999px;padding:10px 5px;font-size:9px}
+.reaction-choices button.selected{background:#e45d55;border-color:#e45d55;color:#fff}
+.reaction-saved{margin:10px 0 0!important;text-align:center;color:#e45d55!important;font-size:8px!important;font-weight:700}
