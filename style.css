@@ -30,3 +30,8 @@
 .watch-tabs{display:flex;gap:6px;margin:16px 0 10px}.watch-tabs button{flex:1;border:1px solid #ddd1c4;background:#fff;border-radius:24px;padding:10px 4px;font-size:9px;color:#777}.watch-tabs button.selected{background:#1c1c1c;color:#fff;border-color:#1c1c1c}.watch-panel{border-top:1px solid #e3d9ce}.provider-row{width:100%;display:flex;align-items:center;justify-content:space-between;border:0;border-bottom:1px solid #e3d9ce;background:transparent;padding:15px 2px;text-align:left}.provider-row span{display:flex;align-items:center;gap:10px}.provider-row i{font-style:normal;width:28px;height:28px;border-radius:8px;background:#f0ebe3;display:grid;place-items:center;font-size:10px}.provider-row b{font-size:11px}.provider-row em{font-style:normal;font-size:8px;color:#999;margin-left:auto;margin-right:12px}.provider-row strong{font-size:12px}.watch-credit{font-size:7px!important;color:#aaa!important;margin-top:10px!important;line-height:1.5}
 
 .taste-note{font-size:7px!important;letter-spacing:.5px;color:#aaa!important;margin-top:8px!important}.today .taste-note:before{content:"✦ ";color:#e45d55}
+
+/* Approved CINEMA DROP hero artwork */
+.candy-hero{height:270px!important;margin:2px -8px 0!important;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cinema-drop-hero-img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;border:0}
+@media(max-height:740px){.candy-hero{height:220px!important}.welcome h1{font-size:25px}.welcome-lead{line-height:1.65}.mini-flow{margin:14px 0 10px}}
