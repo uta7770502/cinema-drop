@@ -60,3 +60,10 @@
   .start{padding:14px}
   .note{display:none}
 }
+.match-why{display:flex!important;flex-wrap:wrap;gap:4px;margin:7px 0 3px!important}
+.match-why span{display:inline-block;border-radius:999px;background:#efe9df;padding:4px 7px;font-size:7px!important;line-height:1.2;color:#5f5a54}
+.match-why span:first-child{background:#fbe4df;color:#c84e47}
+.result-overview{margin-top:5px!important;color:#888!important}
+.concierge-loading{position:relative;overflow:hidden}
+.concierge-loading:after{content:"";display:block;width:38%;height:2px;background:#e45d55;margin-top:14px;animation:thinking 1.15s ease-in-out infinite}
+@keyframes thinking{0%{transform:translateX(-110%)}50%{transform:translateX(100%)}100%{transform:translateX(260%)}}
