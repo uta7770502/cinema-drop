@@ -133,7 +133,7 @@
  document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));let p=$("watchPanel");if(p&&!p.innerHTML.trim())p.innerHTML='<div class="provider-row"><span><b>視聴方法を確認中</b></span></div>'},true));
  $("dropNav")?.addEventListener("click",()=>{fallbackPage("home");setTimeout(()=>document.querySelector(".today")?.scrollIntoView({behavior:"smooth"}),30)},true);
  $("heroRecommend")?.addEventListener("click",()=>{if(recItems.length){recIndex=0;currentMovie=recItems[0];openCurrentDetail()}else recommendForProfile()});
- document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",async(e)=>{e.preventDefault();e.stopPropagation();document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));let y=window.scrollY;try{let r=await fetch("/api/search?mood="+encodeURIComponent(b.dataset.mood)),d=await r.json(),items=(d.results||[]).filter(x=>x.type==="movie"&&x.poster).slice(0,10),row=document.getElementById("pickupRow");recItems=items;recIndex=0;if(items.length&&row){currentMovie=items[0];row.innerHTML=items.map(x=>`<button class="era-card mood-result" data-id="${x.id}"><span style="background-image:url(${x.poster})"></span><b>${x.title}</b><small>${String(x.date||"").slice(0,4)}　★${Number(x.rating||0).toFixed(1)}</small></button>`).join("");row.querySelectorAll(".mood-result").forEach((el,i)=>el.onclick=()=>{currentMovie=items[i];recIndex=i;openCurrentDetail()})}}catch(err){}requestAnimationFrame(()=>window.scrollTo(0,y))},true));
+ document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",async(e)=>{e.preventDefault();e.stopPropagation();window.cinemaDropMoodHero?.(b.dataset.mood);document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));let y=window.scrollY;try{let r=await fetch("/api/search?mood="+encodeURIComponent(b.dataset.mood)),d=await r.json(),items=(d.results||[]).filter(x=>x.type==="movie"&&x.poster).slice(0,10),row=document.getElementById("pickupRow");recItems=items;recIndex=0;if(items.length&&row){currentMovie=items[0];row.innerHTML=items.map(x=>`<button class="era-card mood-result" data-id="${x.id}"><span style="background-image:url(${x.poster})"></span><b>${x.title}</b><small>${String(x.date||"").slice(0,4)}　★${Number(x.rating||0).toFixed(1)}</small></button>`).join("");row.querySelectorAll(".mood-result").forEach((el,i)=>el.onclick=()=>{currentMovie=items[i];recIndex=i;openCurrentDetail()})}}catch(err){}requestAnimationFrame(()=>window.scrollTo(0,y))},true));
  $("comingCard")?.addEventListener("click",openCurrentDetail); $("allRecommend")?.addEventListener("click",()=>document.querySelector(".poster-strip")?.scrollIntoView({behavior:"smooth"}));
  $("moodReset")?.addEventListener("click",()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));recommendForProfile()});
 
@@ -160,10 +160,21 @@ document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("clic
   document.getElementById(isTheater?"heroPrev":"streamPrev")?.addEventListener("click",()=>{idx=(idx-1+items.length)%items.length;render()});
   document.getElementById(isTheater?"heroNext":"streamNext")?.addEventListener("click",()=>{idx=(idx+1)%items.length;render()});render()
  }
- async function load(){
-  let theater=unique(await query("","now_playing")).filter(x=>x.poster||x.backdrop).slice(0,4);
-  let streaming=unique(await query("","streaming")).filter(x=>x.poster||x.backdrop).slice(0,4);
+ async function load(mood){
+  let theater,streaming;
+  if(mood){
+   let [moodData,theaterData,streamData]=await Promise.all([query(mood,"mood"),query("","now_playing"),query("","streaming")]);
+   let moodIds=new Set(unique(moodData).map(x=>x.id));
+   theater=unique(theaterData).filter(x=>(x.poster||x.backdrop)&&moodIds.has(x.id)).slice(0,4);
+   streaming=unique(streamData).filter(x=>(x.poster||x.backdrop)&&moodIds.has(x.id)).slice(0,4);
+   if(!theater.length)theater=unique(moodData).filter(x=>x.poster||x.backdrop).slice(0,4);
+   if(!streaming.length)streaming=unique(moodData).filter(x=>x.poster||x.backdrop).slice(4,8);
+  }else{
+   theater=unique(await query("","now_playing")).filter(x=>x.poster||x.backdrop).slice(0,4);
+   streaming=unique(await query("","streaming")).filter(x=>x.poster||x.backdrop).slice(0,4);
+  }
   if(!theater.length)theater=streaming.slice(0,4);if(!streaming.length)streaming=theater.slice(0,4);mount("theater",theater);mount("stream",streaming)
- }load()
+ }
+ window.cinemaDropMoodHero=load;load()
 })();
 </script></body></html>
