@@ -242,3 +242,12 @@ nav button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width
 #detail .after .after-next{display:none!important}
 
 #detail{padding-bottom:92px}.detail-nav{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:80!important;background:rgba(250,248,243,.96)!important;border-top:1px solid #e5dfd6!important;padding-bottom:env(safe-area-inset-bottom)!important}.detail-nav button{background:transparent}.detail-nav button[data-page="home"]{color:#111}
+
+.detail-nav-fixed{display:none!important;position:fixed!important;inset:auto 0 0 0!important;width:100%!important;height:76px!important;z-index:99999!important;background:#fbf9f5!important;border-top:1px solid #e5dfd6!important;grid-template-columns:repeat(5,1fr)!important;align-items:center!important;padding:6px 8px max(6px,env(safe-area-inset-bottom))!important;box-sizing:content-box!important}
+body:has(#detail:not(.hidden))>.detail-nav-fixed{display:grid!important}
+.detail-nav-fixed button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;border:0!important;background:transparent!important;min-width:0!important;height:62px!important;color:#aaa!important}
+.detail-nav-fixed button svg{display:block!important;width:23px!important;height:23px!important}
+.detail-nav-fixed button span{display:block!important;font-size:10px!important;margin-top:4px!important}
+.detail-nav-fixed button[data-page="home"]{color:#111!important}
+.detail-nav-fixed .dropnav i{display:block!important;width:31px!important;height:31px!important;border-radius:50%!important;background:#ef584f!important;margin:0 auto 2px!important}
+.detail-nav-fixed .dropnav{color:#ef584f!important}
