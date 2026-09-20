@@ -235,6 +235,7 @@ document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("clic
   }
   if(!theater.length)theater=streaming.slice(0,4);if(!streaming.length)streaming=theater.slice(0,4);mount("theater",theater);mount("stream",streaming)
  }
- let after=document.querySelector('.afterdrop-home'),sub=document.getElementById('subpage'),nav=document.querySelector('main nav');if(after&&sub&&nav)nav.parentNode.insertBefore(after,nav);\n window.cinemaDropMoodHero=load;load()
+ let after=document.querySelector('.afterdrop-home'),sub=document.getElementById('subpage'),nav=document.querySelector('main nav');if(after&&sub&&nav)nav.parentNode.insertBefore(after,nav);
+ window.cinemaDropMoodHero=load;load()
 })();
 </script></body></html>
