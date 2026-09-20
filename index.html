@@ -16,7 +16,14 @@
 <button data-mood="アニメ"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c.5-5 3-7 6-7s5.5 2 6 7M10 20c.5-4 2.5-6 6-6s5.5 2 6 6"/></svg><span>みんなで観たい</span></button>
 </div></section>
 <section class="recommend-section editorial-section"><div class="section-head"><div><h2>あなたへのおすすめ</h2><p>好きな映画から見つけた、今観るべき一本。</p></div><button id="allRecommend">すべて見る　›</button></div><div id="pickupRow" class="poster-strip"></div></section>
-<section class="coming-section editorial-section"><div class="section-head"><div><h2>もうすぐ始まる注目作品</h2><p>劇場で、配信で。見逃せない作品をチェック。</p></div><button>すべて見る　›</button></div><button id="comingCard" class="coming-card"><div class="coming-visual"></div><div><span>注目作品</span><small>COMING SOON</small><b id="comingTitle">INTERSTELLAR</b><em>あなたへのおすすめからピックアップ</em></div><i>›</i></button></section>
+<section class="theater-section editorial-section">
+  <div class="theater-kicker"><span>IN THEATERS</span><b>劇場公開</b></div>
+  <div class="section-head theater-head"><div><h2>映画館で観たい一本</h2><p>大きなスクリーンで体験したい、公開中・近日公開のおすすめ。</p></div><button id="allTheater">すべて見る　›</button></div>
+  <button id="comingCard" class="theater-feature">
+    <div class="coming-visual theater-visual"><span class="theater-badge">劇場公開</span></div>
+    <div class="theater-copy"><small>NOW / COMING SOON</small><b id="comingTitle">INTERSTELLAR</b><em>あなたの好みから選んだ劇場作品</em><span class="theater-cta">作品を見る　›</span></div>
+  </button>
+</section>
 <section id="subpage" class="subpage hidden"></section>
 <nav>
 <button class="active" data-page="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H5V11"/><path d="M9 21v-6h6v6"/></svg><span>ホーム</span></button>
