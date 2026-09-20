@@ -251,3 +251,5 @@ body:has(#detail:not(.hidden))>.detail-nav-fixed{display:grid!important}
 .detail-nav-fixed button[data-page="home"]{color:#111!important}
 .detail-nav-fixed .dropnav i{display:block!important;width:31px!important;height:31px!important;border-radius:50%!important;background:#ef584f!important;margin:0 auto 2px!important}
 .detail-nav-fixed .dropnav{color:#ef584f!important}
+
+.detail-nav-fixed.show{display:grid!important}
