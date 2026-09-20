@@ -240,3 +240,5 @@ nav button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width
 #detail .after .goods button small{display:block!important;margin-top:5px!important;font-size:10px!important;line-height:1.35!important;color:#999!important}
 #detail .after .goods button em{position:absolute!important;right:14px!important;bottom:13px!important;font-size:16px!important;color:#ef5b55!important;font-style:normal!important}
 #detail .after .after-next{display:none!important}
+
+#detail{padding-bottom:92px}.detail-nav{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:80!important;background:rgba(250,248,243,.96)!important;border-top:1px solid #e5dfd6!important;padding-bottom:env(safe-area-inset-bottom)!important}.detail-nav button{background:transparent}.detail-nav button[data-page="home"]{color:#111}
