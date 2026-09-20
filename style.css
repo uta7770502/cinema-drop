@@ -229,3 +229,14 @@ nav button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width
 
 .recent-movies{display:grid;gap:10px}.recent-movies>button{width:100%;display:grid;grid-template-columns:58px 1fr 28px;align-items:center;gap:14px;border:1px solid #e5dfd6;background:#fff;border-radius:18px;padding:10px;text-align:left}.recent-movies img,.recent-placeholder{width:58px;height:76px;object-fit:cover;border-radius:10px}.recent-placeholder{display:grid;place-items:center;background:#e9e1d6;font-size:10px}.recent-movies b,.recent-movies small{display:block}.recent-movies b{font-size:15px}.recent-movies small{margin-top:5px;color:#999;font-size:11px}.recent-movies em{font-style:normal;font-size:22px}.recent-empty{padding:22px;border:1px solid #e5dfd6;border-radius:18px;background:#fff;color:#888;font-size:13px;line-height:1.7}
 #detail .after .goods button{width:100%;border:0;text-align:left;font:inherit}
+
+/* Compact editorial AFTER DROP tiles */
+#detail .after{padding-bottom:34px}
+#detail .after .goods{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
+#detail .after .goods button{min-height:118px!important;display:flex!important;position:relative!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-end!important;padding:16px!important;background:#f3efe8!important;border:1px solid #e4ddd3!important;border-radius:16px!important;color:#171717!important}
+#detail .after .goods button i{position:absolute!important;top:15px!important;left:16px!important;width:auto!important;height:auto!important;background:none!important;padding:0!important;color:#ef5b55!important;font-size:10px!important;font-family:Arial,sans-serif!important;font-style:normal!important;font-weight:800!important;letter-spacing:.16em!important}
+#detail .after .goods button span{display:block!important;width:100%!important}
+#detail .after .goods button b{display:block!important;font-size:14px!important;line-height:1.35!important;color:#171717!important}
+#detail .after .goods button small{display:block!important;margin-top:5px!important;font-size:10px!important;line-height:1.35!important;color:#999!important}
+#detail .after .goods button em{position:absolute!important;right:14px!important;bottom:13px!important;font-size:16px!important;color:#ef5b55!important;font-style:normal!important}
+#detail .after .after-next{display:none!important}
