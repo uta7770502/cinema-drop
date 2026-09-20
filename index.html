@@ -32,10 +32,14 @@
  <div class="afterdrop-kicker"><span>AFTER DROP</span><b>観たあとも、映画を楽しむ。</b></div>
  <div class="section-head"><div><h2>映画の余韻を、もう少し。</h2><p>観た作品から広がる、本・音楽・グッズ・次に観たい一本。</p></div></div>
  <div class="afterdrop-grid">
-  <button><i>BOOK</i><b>原作・関連書籍</b><small>物語をもっと深く知る</small><em>→</em></button>
-  <button><i>NEXT</i><b>次に観たい映画</b><small>この作品が好きなら</small><em>→</em></button>
-  <button><i>MUSIC</i><b>サウンドトラック</b><small>映画の余韻を聴く</small><em>→</em></button>
-  <button><i>GOODS</i><b>映画グッズ</b><small>お気に入りを手元に</small><em>→</em></button>
+  <button data-after="book"><i>BOOK</i><b>原作・関連書籍</b><small>物語をもっと深く知る</small><em>→</em></button>
+  <button data-after="next"><i>NEXT</i><b>次に観たい映画</b><small>この作品が好きなら</small><em>→</em></button>
+  <button data-after="music"><i>MUSIC</i><b>サウンドトラック</b><small>映画の余韻を聴く</small><em>→</em></button>
+  <button data-after="goods"><i>GOODS</i><b>映画グッズ</b><small>お気に入りを手元に</small><em>→</em></button>
+  <button data-after="cast"><i>CAST</i><b>出演俳優</b><small>キャストから作品を広げる</small><em>→</em></button>
+  <button data-after="director"><i>DIRECTOR</i><b>監督・フィルモグラフィ</b><small>作家性をもっと知る</small><em>→</em></button>
+  <button data-after="location"><i>LOCATION</i><b>ロケ地・舞台</b><small>映画の場所をたどる</small><em>→</em></button>
+  <button data-after="trivia"><i>TRIVIA</i><b>制作背景・トリビア</b><small>知るともう一度観たくなる</small><em>→</em></button>
  </div>
 </section>
 <section id="subpage" class="subpage hidden"></section>
@@ -117,7 +121,7 @@
    if(x.title)$("detailTitle").textContent=x.title;
    $("detailMeta").textContent=[String(x.date||currentMovie.date||"").slice(0,4),x.runtime?x.runtime+"min":"",...(x.genres||[]).slice(0,2)].filter(Boolean).join(" · ");
    if(x.backdrop)$("detailHero").style.background='linear-gradient(0deg,rgba(0,0,0,.72),transparent 65%),url("'+x.backdrop+'") center/cover no-repeat';
-   currentMovie={...currentMovie,...x,recommendations:d.recommendations||[],watch:d.watch||{}};
+   currentMovie={...currentMovie,...x,recommendations:d.recommendations||[],watch:d.watch||{},credits:d.credits||{}};
    renderDetailWatch("stream");renderAfterDrop();
   }catch(e){renderDetailWatch("stream");renderAfterDrop()}
  }
@@ -140,6 +144,21 @@
    let a=document.createElement("button");a.className="after-next";a.innerHTML='<i>NEXT</i><span><b>次に観たい一本</b><small>'+rec.title+' · '+String(rec.date||"").slice(0,4)+'</small></span><em>→</em>';a.onclick=()=>{currentMovie=rec;openCurrentDetail()};after.querySelector(".goods").appendChild(a)
   }
  }
+ function openAfterDrop(kind){
+  let m=currentMovie||recItems[0];if(!m)return;
+  let sub=$("subpage"),t=m.title||"この作品",q=encodeURIComponent(t),credits=m.credits||{},recs=m.recommendations||[];
+  homeSections(false);sub.classList.remove("hidden");window.scrollTo(0,0);
+  const heads={book:["BOOK","原作・関連書籍","物語の背景を、読む。"],next:["NEXT","次に観たい映画","この一本から、次の一本へ。"],music:["MUSIC","音楽・サウンドトラック","耳から、映画の余韻へ。"],goods:["GOODS","映画グッズ","作品を、手元に残す。"],cast:["CAST","出演俳優","俳優から、作品世界を広げる。"],director:["DIRECTOR","監督・フィルモグラフィ","監督の作家性をたどる。"],location:["LOCATION","ロケ地・舞台","映画の場所を、現実でたどる。"],trivia:["TRIVIA","制作背景・トリビア","知ると、もう一度観たくなる。"]},h=heads[kind]||heads.book;
+  let body="";
+  if(kind==="cast")body=(credits.cast||[]).length?'<div class="after-people">'+credits.cast.map(x=>'<article>'+(x.profile?'<img src="'+x.profile+'" alt="">':'')+'<div><b>'+x.name+'</b><small>'+x.character+'</small></div></article>').join("")+'</div>':'<p class="after-empty">出演者情報を取得中です。作品詳細から開くと表示されます。</p>';
+  else if(kind==="director")body=(credits.director||[]).length?'<div class="after-people">'+credits.director.map(x=>'<article>'+(x.profile?'<img src="'+x.profile+'" alt="">':'')+'<div><b>'+x.name+'</b><small>DIRECTOR</small></div></article>').join("")+'</div>':'<p class="after-empty">監督情報を取得中です。作品詳細から開くと表示されます。</p>';
+  else if(kind==="next")body=recs.length?'<div class="after-movies">'+recs.map((x,i)=>'<button data-rec="'+i+'">'+(x.poster?'<img src="'+x.poster+'" alt="">':'')+'<b>'+x.title+'</b><small>'+String(x.date||"").slice(0,4)+'</small></button>').join("")+'</div>':'<p class="after-empty">関連作品を取得中です。作品詳細から開くと表示されます。</p>';
+  else {let desc={book:"原作小説、ノベライズ、関連書籍、制作資料などをまとめて探します。",music:"劇伴、主題歌、サウンドトラックなど、作品の音の世界を深掘りします。",goods:"公式グッズ、パンフレット、ポスター、Blu-ray / 4K UHDなどを探します。",location:"舞台になった街や撮影場所、作品と土地の関係をたどります。",trivia:"制作背景、インタビュー、メイキング、作品にまつわる情報を深掘りします。"}[kind]||"";let term={book:"原作 関連書籍",music:"サウンドトラック 主題歌",goods:"公式 グッズ Blu-ray",location:"ロケ地 撮影場所 舞台",trivia:"制作背景 メイキング インタビュー"}[kind]||"";body='<div class="after-story"><p>'+desc+'</p><div class="after-info"><small>ABOUT THE FILM</small><h3>'+t+'</h3><p>'+(m.overview||"作品情報をもとに、関連コンテンツを探せます。")+'</p></div><a target="_blank" href="https://www.google.com/search?q='+encodeURIComponent(t+" "+term)+'">さらに詳しい情報を探す ↗</a></div>'}
+  sub.innerHTML='<div class="after-page"><button class="after-back">← AFTER DROP</button><small>'+h[0]+' · '+t+'</small><h2>'+h[1]+'</h2><p class="after-lead">'+h[2]+'</p>'+body+'</div>';
+  sub.querySelector(".after-back").onclick=()=>fallbackPage("home");
+  sub.querySelectorAll("[data-rec]").forEach(b=>b.onclick=()=>{currentMovie=recs[+b.dataset.rec];openCurrentDetail()});
+ }
+ document.querySelectorAll(".afterdrop-home [data-after]").forEach(b=>b.onclick=()=>openAfterDrop(b.dataset.after));
  async function recommendForProfile(q){
    try{
     let p=loadProfile(),terms=q?[q]:[...(p.tastes||[]).slice(0,3),...(p.favorites||[]).slice(0,2),profileQuery()].filter(Boolean);
