@@ -186,3 +186,13 @@ nav button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width
   .poster-strip .era-card b,.era-card b{font-size:7px;line-height:1.25;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .poster-strip .era-card small,.era-card small{font-size:7px}
 }
+
+/* FIX: actual recommendation cards — five visible in one mobile viewport */
+@media(max-width:430px){
+  #pickupRow.poster-strip{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important;overflow:visible!important;width:100%!important}
+  #pickupRow .poster-card{width:auto!important;min-width:0!important;flex:none!important;padding:0!important}
+  #pickupRow .poster-card img,
+  #pickupRow .poster-card>span{width:100%!important;height:auto!important;aspect-ratio:2/3!important;object-fit:cover!important;border-radius:5px!important}
+  #pickupRow .poster-card b{font-size:6.5px!important;line-height:1.25!important;margin-top:4px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  #pickupRow .poster-card small{font-size:6.5px!important;line-height:1.2!important}
+}
