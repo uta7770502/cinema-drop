@@ -89,7 +89,17 @@
  }
  function openCurrentDetail(){if(!currentMovie)return;$("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);$("detail").classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0)}
  async function recommendForProfile(q){
-   try{let term=q||profileQuery(),latest=await fetch("/api/search?mode=latest").then(r=>r.json()),taste=await fetch("/api/search?q="+encodeURIComponent(term)).then(r=>r.json()),pool=[...(latest.results||[]),...(taste.results||[])],seen=new Set(),items=pool.filter(x=>x.type==="movie"&&x.poster&&!seen.has(x.id)&&(seen.add(x.id)||true)).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).slice(0,10);let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}");let bad=Object.keys(hist).filter(k=>hist[k].reaction==="bad");recItems=items.filter(m=>!bad.includes(m.title)).slice(0,10);recIndex=0;if(recItems.length){currentMovie=recItems[0];renderRec()}}catch(e){}
+   try{
+    let p=loadProfile(),terms=q?[q]:[...(p.tastes||[]).slice(0,3),...(p.favorites||[]).slice(0,2),profileQuery()].filter(Boolean);
+    let requests=[fetch("/api/search?mode=latest").then(r=>r.json())].concat(terms.map(t=>fetch("/api/search?q="+encodeURIComponent(t)).then(r=>r.json()).catch(()=>({results:[]}))));
+    let sets=await Promise.all(requests),pool=sets.flatMap(d=>d.results||[]),seen=new Set(),avoid=p.avoid||[];
+    let items=pool.filter(x=>x.type==="movie"&&x.poster&&!seen.has(x.id)&&(seen.add(x.id)||true));
+    const bad=x=>{let s=(x.title+" "+(x.overview||"")).toLowerCase();return (avoid.includes("怖すぎる映画")&&/ホラー|恐怖|殺人|悪霊/.test(s))||(avoid.includes("残酷な描写")&&/残酷|猟奇|殺人|血/.test(s))||(avoid.includes("恋愛中心")&&/恋愛|ラブストーリー/.test(s))||(avoid.includes("子ども向け")&&/キッズ|子ども|児童/.test(s))};
+    const score=x=>{let s=0,txt=(x.title+" "+(x.overview||"")).toLowerCase();(p.tastes||[]).forEach(t=>{if(txt.includes(t.toLowerCase()))s+=5});terms.forEach(t=>{if(txt.includes(String(t).toLowerCase()))s+=3});if((p.watchStyle||[]).includes("新作中心"))s+=Math.max(0,(+(String(x.date||"").slice(0,4))||0)-2020);if((p.watchStyle||[]).includes("旧作も好き")&&+(String(x.date||"").slice(0,4))<2000)s+=4;s+=Math.min(4,Number(x.rating||0)/2);return s};
+    items=items.filter(x=>!bad(x)).sort((a,b)=>score(b)-score(a)).slice(0,10);
+    let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}"),badTitles=Object.keys(hist).filter(k=>hist[k].reaction==="bad");
+    recItems=items.filter(m=>!badTitles.includes(m.title)).slice(0,10);recIndex=0;if(recItems.length){currentMovie=recItems[0];renderRec()}
+   }catch(e){}
  }
  function homeSections(on){[".dual-hero",".moods",".era-filter",".recommend-section"].forEach(q=>{let e=document.querySelector(q);if(e)e.style.display=on?"":"none"});let a=document.querySelector(".afterdrop-home");if(a)a.style.display=""}
  function fallbackPage(page){
