@@ -200,3 +200,20 @@ nav button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width
 /* AFTER DROP home section */
 .afterdrop-home{margin:28px 18px 105px;padding:25px 20px 22px!important;background:#151515;color:#fff;border-radius:0}
 .afterdrop-kicker{display:flex;align-items:center;gap:12px;margin-bottom:20px}.afterdrop-kicker span{color:#ff625c;font-size:9px;font-weight:900;letter-spacing:2px}.afterdrop-kicker b{border:1px solid #777;border-radius:999px;padding:6px 10px;font-size:9px}.afterdrop-home .section-head h2{color:#fff}.afterdrop-home .section-head p{color:#999}.afterdrop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.afterdrop-grid button{min-height:96px;border:1px solid #383838;background:#202020;color:#fff;border-radius:14px;text-align:left;padding:13px;position:relative}.afterdrop-grid i{display:block;color:#ff625c;font-size:7px;font-style:normal;font-weight:800;letter-spacing:1.5px;margin-bottom:9px}.afterdrop-grid b{display:block;font-size:11px}.afterdrop-grid small{display:block;color:#999;font-size:8px;margin-top:4px}.afterdrop-grid em{position:absolute;right:12px;bottom:10px;font-style:normal;font-size:15px}
+
+/* enriched movie detail */
+#detail .watch-panel{display:grid;gap:8px;margin-top:14px}
+#detail .provider-row{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 12px;border:1px solid #e1d8cc;border-radius:14px;background:#fff;color:#171717;text-decoration:none}
+#detail .provider-row img{width:42px;height:42px;border-radius:10px;object-fit:cover}
+#detail .provider-row span{display:flex;flex-direction:column;gap:3px;flex:1}
+#detail .provider-row small{color:#999;font-size:10px}
+#detail .provider-row em{font-style:normal;font-size:20px}
+#detail .theater-find{padding:18px;border-radius:16px;background:#171717;color:#fff}
+#detail .theater-find p{font-size:11px;color:#aaa;line-height:1.7}
+#detail .theater-find a{display:inline-block;margin-top:8px;padding:10px 14px;border:1px solid #666;border-radius:999px;color:#fff;text-decoration:none;font-size:11px}
+#detail .goods{display:grid;gap:8px}
+#detail .after-next{width:100%;display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #ded5c9;border-radius:14px;background:#fffaf4;text-align:left}
+#detail .after-next i{font-style:normal;color:#f65b55;font-size:9px;font-weight:900;letter-spacing:1.5px}
+#detail .after-next span{display:flex;flex:1;flex-direction:column;gap:3px}
+#detail .after-next small{color:#999;font-size:10px}
+#detail .after-next em{font-style:normal;font-size:20px}
