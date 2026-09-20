@@ -146,3 +146,22 @@ nav button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width
  background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;
 }
 .hero-reference-image:after{display:none!important}
+
+/* Dedicated theatrical release section */
+.theater-section{margin-top:38px;padding:26px 20px 30px;background:#171717;color:#fff;border-radius:0}
+.theater-kicker{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.theater-kicker span{font-size:9px;letter-spacing:2.4px;color:#ef5b52;font-weight:800}
+.theater-kicker b{font-size:12px;letter-spacing:.08em;border:1px solid rgba(255,255,255,.42);border-radius:999px;padding:5px 9px}
+.theater-head{align-items:flex-end}
+.theater-head h2{color:#fff;margin:0 0 4px}
+.theater-head p{color:rgba(255,255,255,.6)}
+.theater-head button{color:rgba(255,255,255,.72)}
+.theater-feature{display:grid;grid-template-columns:44% 56%;width:100%;padding:0;border:0;background:#fff;text-align:left;border-radius:18px;overflow:hidden;color:#111;box-shadow:none}
+.theater-visual{min-height:148px;position:relative;background-size:cover!important;background-position:center!important}
+.theater-badge{position:absolute;left:10px;top:10px;background:#ef5b52;color:#fff;font-size:10px;font-weight:800;padding:6px 9px;border-radius:999px;letter-spacing:.04em}
+.theater-copy{padding:17px 16px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0}
+.theater-copy small{font-size:8px;letter-spacing:1.6px;color:#ef5b52;font-weight:800;margin-bottom:8px}
+.theater-copy b{font-family:Georgia,"Times New Roman",serif;font-size:19px;line-height:1.08;word-break:break-word}
+.theater-copy em{font-style:normal;font-size:9px;color:#888;margin-top:7px;line-height:1.5}
+.theater-cta{font-size:10px;font-weight:700;margin-top:13px;border-bottom:1px solid #111;padding-bottom:2px}
+@media(max-width:430px){.theater-section{margin-top:30px;padding:23px 18px 28px}.theater-feature{grid-template-columns:43% 57%}.theater-visual{min-height:142px}.theater-copy{padding:15px 13px}.theater-copy b{font-size:17px}}
