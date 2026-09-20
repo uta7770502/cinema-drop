@@ -96,7 +96,39 @@
   if($("comingTitle"))$("comingTitle").textContent=x.title;
   if($("comingCard")&&x.backdrop)$("comingCard").style.setProperty("--coming-bg",'url("'+x.backdrop+'")');
  }
- function openCurrentDetail(){if(!currentMovie)return;$("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);$("detail").classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0)}
+ async function openCurrentDetail(){if(!currentMovie)return;
+  $("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);
+  if(currentMovie.backdrop)$("detailHero").style.background='linear-gradient(0deg,rgba(0,0,0,.72),transparent 65%),url("'+currentMovie.backdrop+'") center/cover no-repeat';
+  $("detail").classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0);
+  let panel=$("watchPanel");if(panel)panel.innerHTML='<div class="provider-row"><span><b>視聴情報を確認中…</b></span></div>';
+  try{
+   let r=await fetch("/api/title?type="+(currentMovie.type||"movie")+"&id="+currentMovie.id),d=await r.json(),x=d.detail||{};
+   if(x.title)$("detailTitle").textContent=x.title;
+   $("detailMeta").textContent=[String(x.date||currentMovie.date||"").slice(0,4),x.runtime?x.runtime+"min":"",...(x.genres||[]).slice(0,2)].filter(Boolean).join(" · ");
+   if(x.backdrop)$("detailHero").style.background='linear-gradient(0deg,rgba(0,0,0,.72),transparent 65%),url("'+x.backdrop+'") center/cover no-repeat';
+   currentMovie={...currentMovie,...x,recommendations:d.recommendations||[],watch:d.watch||{}};
+   renderDetailWatch("stream");renderAfterDrop();
+  }catch(e){renderDetailWatch("stream");renderAfterDrop()}
+ }
+ function renderDetailWatch(kind){
+  let p=$("watchPanel");if(!p||!currentMovie)return;let w=currentMovie.watch||{},list=kind==="stream"?(w.stream||[]):kind==="rent"?(w.rent||[]):[];
+  if(kind==="theater"){
+   let q=encodeURIComponent(currentMovie.title+" 映画館 上映");
+   p.innerHTML='<div class="theater-find"><b>上映中の映画館を探す</b><p>作品名から、現在の上映館・上映時間を確認できます。</p><a target="_blank" href="https://www.google.com/search?q='+q+'">上映館を検索する →</a></div>';return
+  }
+  p.innerHTML=list.length?list.map(v=>'<a class="provider-row" target="_blank" href="'+(w.link||"#")+'">'+(v.logo?'<img src="'+v.logo+'" alt="">':'')+'<span><b>'+v.name+'</b><small>'+(kind==="stream"?"見放題・配信情報":"レンタル情報")+'</small></span><em>↗</em></a>').join(""):'<div class="provider-row"><span><b>現在、日本で確認できる'+(kind==="stream"?"配信":"レンタル")+'情報はありません</b><small>配信状況は変更される場合があります。</small></span></div>';
+ }
+ function renderAfterDrop(){
+  if(!currentMovie)return;let t=currentMovie.title,q=encodeURIComponent(t),rec=(currentMovie.recommendations||[])[0];
+  let g1=$("goods1"),g2=$("goods2"),g3=$("goods3");
+  if(g1){g1.href="https://www.google.com/search?q="+encodeURIComponent(t+" 原作 本");g1.querySelector("b").textContent=t+" の原作・関連書籍"}
+  if(g2){g2.href="https://www.google.com/search?q="+encodeURIComponent(t+" サウンドトラック Blu-ray");g2.querySelector("b").textContent="音楽・Blu-ray / 4K UHD";g2.querySelector("i").textContent="MUSIC"}
+  if(g3){g3.href="https://www.google.com/search?q="+encodeURIComponent(t+" 映画 グッズ 公式");g3.querySelector("b").textContent=t+" の映画グッズ"}
+  let after=document.querySelector("#detail .after");if(after&&rec){
+   let old=after.querySelector(".after-next");if(old)old.remove();
+   let a=document.createElement("button");a.className="after-next";a.innerHTML='<i>NEXT</i><span><b>次に観たい一本</b><small>'+rec.title+' · '+String(rec.date||"").slice(0,4)+'</small></span><em>→</em>';a.onclick=()=>{currentMovie=rec;openCurrentDetail()};after.querySelector(".goods").appendChild(a)
+  }
+ }
  async function recommendForProfile(q){
    try{
     let p=loadProfile(),terms=q?[q]:[...(p.tastes||[]).slice(0,3),...(p.favorites||[]).slice(0,2),profileQuery()].filter(Boolean);
@@ -152,7 +184,7 @@
  $("save")?.addEventListener("click",e=>{e.stopImmediatePropagation();let t=$("title").textContent,a=JSON.parse(localStorage.getItem("cinemaDropSaved")||"[]"),i=a.indexOf(t);if(i<0){a.push(t);e.currentTarget.textContent="♥";e.currentTarget.classList.add("saved")}else{a.splice(i,1);e.currentTarget.textContent="♡";e.currentTarget.classList.remove("saved")}localStorage.setItem("cinemaDropSaved",JSON.stringify(a))},true);
  $("watchedBtn")?.addEventListener("click",()=>{$("reactionChoices")?.classList.toggle("hidden")},true);
  document.querySelectorAll("#reactionChoices button").forEach(b=>b.addEventListener("click",()=>{let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}");hist[$("detailTitle").textContent]={reaction:b.dataset.reaction,date:new Date().toISOString()};localStorage.setItem("cinemaDropHistory",JSON.stringify(hist));setTimeout(recommendForProfile,50);document.querySelectorAll("#reactionChoices button").forEach(x=>x.classList.toggle("selected",x===b));$("reactionSaved")?.classList.remove("hidden")},true));
- document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));let p=$("watchPanel");if(p&&!p.innerHTML.trim())p.innerHTML='<div class="provider-row"><span><b>視聴方法を確認中</b></span></div>'},true));
+ document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));renderDetailWatch(b.dataset.watch)},true));
  $("dropNav")?.addEventListener("click",()=>{fallbackPage("home");setTimeout(()=>document.querySelector(".today")?.scrollIntoView({behavior:"smooth"}),30)},true);
  $("heroRecommend")?.addEventListener("click",()=>{if(recItems.length){recIndex=0;currentMovie=recItems[0];openCurrentDetail()}else recommendForProfile()});
  document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",async(e)=>{e.preventDefault();e.stopPropagation();window.cinemaDropMoodHero?.(b.dataset.mood);document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));let y=window.scrollY;try{let r=await fetch("/api/search?mood="+encodeURIComponent(b.dataset.mood)),d=await r.json(),items=(d.results||[]).filter(x=>x.type==="movie"&&x.poster).slice(0,10),row=document.getElementById("pickupRow");recItems=items;recIndex=0;if(items.length&&row){currentMovie=items[0];row.innerHTML=items.map(x=>`<button class="era-card mood-result" data-id="${x.id}"><span style="background-image:url(${x.poster})"></span><b>${x.title}</b><small>${String(x.date||"").slice(0,4)}　★${Number(x.rating||0).toFixed(1)}</small></button>`).join("");row.querySelectorAll(".mood-result").forEach((el,i)=>el.onclick=()=>{currentMovie=items[i];recIndex=i;openCurrentDetail()})}}catch(err){}requestAnimationFrame(()=>window.scrollTo(0,y))},true));
