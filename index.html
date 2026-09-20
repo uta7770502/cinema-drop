@@ -61,6 +61,15 @@
   let key=["favorites","tastes","avoid","watchStyle","services"][safeStep-1];
   box.querySelectorAll(".choice-grid button").forEach(b=>{if(setupSelections[key].includes(b.textContent))b.classList.add("selected");b.onclick=()=>{b.classList.toggle("selected");setupSelections[key]=[...box.querySelectorAll(".choice-grid button.selected")].map(x=>x.textContent)}});
  }
+ document.getElementById("stepContent")?.addEventListener("click",e=>{
+  let b=e.target.closest(".choice-grid button");if(!b)return;
+  e.preventDefault();e.stopImmediatePropagation();
+  let key=["favorites","tastes","avoid","watchStyle","services"][safeStep-1];if(!key)return;
+  setupSelections[key]=setupSelections[key]||[];
+  let on=!b.classList.contains("selected");b.classList.toggle("selected",on);
+  let value=b.textContent.trim();
+  setupSelections[key]=on?[...new Set([...setupSelections[key],value])]:setupSelections[key].filter(x=>x!==value);
+ },true);
  function loadProfile(){try{let p=JSON.parse(localStorage.getItem("cinemaDropProfile")||"{}");return {favorites:p.favorites||[],tastes:p.tastes||[],avoid:p.avoid||[],watchStyle:p.watchStyle||[],services:p.services||[],complete:!!p.complete}}catch(e){return {favorites:[],tastes:[],avoid:[],watchStyle:[],services:[],complete:false}}}
  function saveProfile(){let p={...setupSelections,complete:true};localStorage.setItem("cinemaDropProfile",JSON.stringify(p));return p}
  function profileQuery(){
