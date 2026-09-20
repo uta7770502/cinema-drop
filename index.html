@@ -175,7 +175,8 @@
     if(q){let t;q.oninput=()=>{clearTimeout(t);t=setTimeout(()=>safeSearch(q.value),500)}}
   }
  }
- function startOnboarding(){let p=loadProfile();setupSelections={favorites:[...(p.favorites||[])],tastes:[...(p.tastes||[])],avoid:[...(p.avoid||[])],watchStyle:[...(p.watchStyle||[])],services:[...(p.services||[])]};safeStep=1;$("welcome").classList.add("hidden");$("home").classList.add("hidden");$("setup").classList.remove("hidden");drawSetup()}\n $("startBtn")?.addEventListener("click",startOnboarding);
+ function startOnboarding(){let p=loadProfile();setupSelections={favorites:[...(p.favorites||[])],tastes:[...(p.tastes||[])],avoid:[...(p.avoid||[])],watchStyle:[...(p.watchStyle||[])],services:[...(p.services||[])]};safeStep=1;$("welcome").classList.add("hidden");$("home").classList.add("hidden");$("setup").classList.remove("hidden");drawSetup()}
+ $("startBtn")?.addEventListener("click",startOnboarding);
  $("skipBtn")?.addEventListener("click",()=>{$("welcome").classList.add("hidden");$("setup").classList.add("hidden");$("home").classList.remove("hidden");fallbackPage("home")});
  $("nextBtn")?.addEventListener("click",e=>{if($("setup").classList.contains("hidden"))return;e.stopImmediatePropagation();if(safeStep<5){safeStep++;drawSetup()}else{saveProfile();$("setup").classList.add("hidden");$("home").classList.remove("hidden");fallbackPage("home")}},true);
  $("backBtn")?.addEventListener("click",e=>{if(safeStep>1){e.stopImmediatePropagation();safeStep--;drawSetup()}else{$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")}},true);
