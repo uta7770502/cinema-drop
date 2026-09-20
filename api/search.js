@@ -1,9 +1,11 @@
 export default async function handler(req,res){
  const token=process.env.TMDB_READ_TOKEN;if(!token)return res.status(503).json({error:"TMDB_NOT_CONFIGURED"});
- const q=String(req.query.q||"").trim(),mode=String(req.query.mode||"").trim();
+ const q=String(req.query.q||"").trim(),mode=String(req.query.mode||"").trim(),mood=String(req.query.mood||"").trim();
  try{
   let url;
-  if(mode){
+  if(mood){
+   const moods={cry:{genres:"18,10749",sort:"vote_average.desc",votes:"150"},easy:{genres:"35,10751,16",sort:"popularity.desc",votes:"80"},uplift:{genres:"35,12,10751",sort:"popularity.desc",votes:"100"},deep:{genres:"18,9648,36",sort:"vote_average.desc",votes:"200"},cozy:{genres:"18,35,10749",sort:"vote_average.desc",votes:"120"},group:{genres:"12,35,16,10751",sort:"popularity.desc",votes:"100"}};let m=moods[mood]||moods.cozy;url=new URL("https://api.themoviedb.org/3/discover/movie");url.searchParams.set("language","ja-JP");url.searchParams.set("region","JP");url.searchParams.set("include_adult","false");url.searchParams.set("with_genres",m.genres);url.searchParams.set("sort_by",m.sort);url.searchParams.set("vote_count.gte",m.votes);url.searchParams.set("vote_average.gte","6.2");url.searchParams.set("without_genres","27");
+  }else if(mode){
    url=new URL(mode==="now_playing"?"https://api.themoviedb.org/3/movie/now_playing":"https://api.themoviedb.org/3/discover/movie");
    url.searchParams.set("language","ja-JP");url.searchParams.set("region","JP");url.searchParams.set("include_adult","false");
    if(mode==="latest"){url.searchParams.set("sort_by","primary_release_date.desc");url.searchParams.set("release_date.lte",new Date().toISOString().slice(0,10));url.searchParams.set("vote_count.gte","5")}
