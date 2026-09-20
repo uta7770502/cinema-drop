@@ -18,12 +18,12 @@
  </div>
 </section>
 <section class="moods editorial-section"><div class="section-head"><div><h2>今日の気分からさがす</h2><p>今の気分にぴったりの映画を、AIがセレクト。</p></div><button id="moodReset">すべて見る　›</button></div><div class="chips mood-grid">
-<button data-mood="ドラマ"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6a5.5 5.5 0 0 0 1-8.8z"/></svg><span>泣きたい</span></button>
-<button data-mood="コメディ"><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5-1.8A5 5 0 0 0 7 18z"/></svg><span>何も考えたくない</span></button>
-<button data-mood="ファミリー"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span>元気が出る</span></button>
-<button data-mood="ミステリー"><svg viewBox="0 0 24 24"><path d="M19 15.5A8 8 0 0 1 8.5 5a8.5 8.5 0 1 0 10.5 10.5z"/></svg><span>じっくり観たい</span></button>
-<button data-mood="ヒューマンドラマ"><svg viewBox="0 0 24 24"><path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 11h18v7H3z"/></svg><span>家でまったり</span></button>
-<button data-mood="アニメ"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c.5-5 3-7 6-7s5.5 2 6 7M10 20c.5-4 2.5-6 6-6s5.5 2 6 6"/></svg><span>みんなで観たい</span></button>
+<button data-mood="cry"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6a5.5 5.5 0 0 0 1-8.8z"/></svg><span>泣きたい</span></button>
+<button data-mood="easy"><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5-1.8A5 5 0 0 0 7 18z"/></svg><span>何も考えたくない</span></button>
+<button data-mood="uplift"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span>元気が出る</span></button>
+<button data-mood="deep"><svg viewBox="0 0 24 24"><path d="M19 15.5A8 8 0 0 1 8.5 5a8.5 8.5 0 1 0 10.5 10.5z"/></svg><span>じっくり観たい</span></button>
+<button data-mood="cozy"><svg viewBox="0 0 24 24"><path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 11h18v7H3z"/></svg><span>家でまったり</span></button>
+<button data-mood="group"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c.5-5 3-7 6-7s5.5 2 6 7M10 20c.5-4 2.5-6 6-6s5.5 2 6 6"/></svg><span>みんなで観たい</span></button>
 </div></section>
 <section class="era-filter editorial-section"><div class="era-filter-head"><div><small>RELEASE FILTER</small><h2>公開年代で絞り込む</h2></div><label class="latest-switch"><input id="latestFirst" type="checkbox" checked><span></span><b>新着順</b></label></div><div class="era-tabs" id="eraTabs"><button data-era="pre1990">1990以前</button><button data-era="1990">1990年代</button><button data-era="2000">2000年代</button><button data-era="2010">2010年代</button><button data-era="2020">2020年代</button><button class="selected" data-era="latest">最新映画</button></div></section>
 <section class="recommend-section editorial-section"><div class="section-head"><div><h2>あなたへのおすすめ</h2><p>好きな映画から見つけた、今観るべき一本。</p></div><button id="allRecommend">すべて見る　›</button></div><div id="pickupRow" class="poster-strip"></div></section>
@@ -133,7 +133,7 @@
  document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));let p=$("watchPanel");if(p&&!p.innerHTML.trim())p.innerHTML='<div class="provider-row"><span><b>視聴方法を確認中</b></span></div>'},true));
  $("dropNav")?.addEventListener("click",()=>{fallbackPage("home");setTimeout(()=>document.querySelector(".today")?.scrollIntoView({behavior:"smooth"}),30)},true);
  $("heroRecommend")?.addEventListener("click",()=>{if(recItems.length){recIndex=0;currentMovie=recItems[0];openCurrentDetail()}else recommendForProfile()});
- document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));recommendForProfile(b.dataset.mood)}));
+ document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",async()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));try{let r=await fetch("/api/search?mood="+encodeURIComponent(b.dataset.mood)),d=await r.json();recItems=(d.results||[]).filter(x=>x.type==="movie"&&x.poster).slice(0,10);recIndex=0;if(recItems.length){currentMovie=recItems[0];renderRec();document.querySelector(".recommend-section")?.scrollIntoView({behavior:"smooth",block:"start"})}}catch(e){}}));
  $("comingCard")?.addEventListener("click",openCurrentDetail); $("allRecommend")?.addEventListener("click",()=>document.querySelector(".poster-strip")?.scrollIntoView({behavior:"smooth"}));
  $("moodReset")?.addEventListener("click",()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));recommendForProfile()});
 
