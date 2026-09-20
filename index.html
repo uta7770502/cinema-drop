@@ -84,7 +84,7 @@
  }
  function openCurrentDetail(){if(!currentMovie)return;$("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);$("detail").classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0)}
  async function recommendForProfile(q){
-   try{let term=q||profileQuery(),r=await fetch("/api/search?q="+encodeURIComponent(term)),d=await r.json(),items=(d.results||[]).filter(x=>x.type==="movie"&&x.poster).slice(0,5);let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}");let bad=Object.keys(hist).filter(k=>hist[k].reaction==="bad");recItems=items.filter(m=>!bad.includes(m.title)).slice(0,5);recIndex=0;if(recItems.length){currentMovie=recItems[0];renderRec()}}catch(e){}
+   try{let term=q||profileQuery(),latest=await fetch("/api/search?mode=latest").then(r=>r.json()),taste=await fetch("/api/search?q="+encodeURIComponent(term)).then(r=>r.json()),pool=[...(latest.results||[]),...(taste.results||[])],seen=new Set(),items=pool.filter(x=>x.type==="movie"&&x.poster&&!seen.has(x.id)&&(seen.add(x.id)||true)).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).slice(0,6);let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}");let bad=Object.keys(hist).filter(k=>hist[k].reaction==="bad");recItems=items.filter(m=>!bad.includes(m.title)).slice(0,6);recIndex=0;if(recItems.length){currentMovie=recItems[0];renderRec()}}catch(e){}
  }
  function homeSections(on){[".editorial-hero",".moods",".recommend-section",".coming-section"].forEach(q=>{let e=document.querySelector(q);if(e)e.style.display=on?"":"none"})}
  function fallbackPage(page){
