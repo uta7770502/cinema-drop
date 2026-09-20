@@ -196,3 +196,7 @@ nav button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width
   #pickupRow .poster-card b{font-size:6.5px!important;line-height:1.25!important;margin-top:4px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
   #pickupRow .poster-card small{font-size:6.5px!important;line-height:1.2!important}
 }
+
+/* AFTER DROP home section */
+.afterdrop-home{margin:28px 18px 105px;padding:25px 20px 22px!important;background:#151515;color:#fff;border-radius:0}
+.afterdrop-kicker{display:flex;align-items:center;gap:12px;margin-bottom:20px}.afterdrop-kicker span{color:#ff625c;font-size:9px;font-weight:900;letter-spacing:2px}.afterdrop-kicker b{border:1px solid #777;border-radius:999px;padding:6px 10px;font-size:9px}.afterdrop-home .section-head h2{color:#fff}.afterdrop-home .section-head p{color:#999}.afterdrop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.afterdrop-grid button{min-height:96px;border:1px solid #383838;background:#202020;color:#fff;border-radius:14px;text-align:left;padding:13px;position:relative}.afterdrop-grid i{display:block;color:#ff625c;font-size:7px;font-style:normal;font-weight:800;letter-spacing:1.5px;margin-bottom:9px}.afterdrop-grid b{display:block;font-size:11px}.afterdrop-grid small{display:block;color:#999;font-size:8px;margin-top:4px}.afterdrop-grid em{position:absolute;right:12px;bottom:10px;font-style:normal;font-size:15px}
