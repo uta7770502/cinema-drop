@@ -60,19 +60,21 @@
  function drawSetup(){
   let box=$("stepContent");if(!box)return;
   box.innerHTML=setupData[safeStep-1];$("stepNo").textContent=safeStep+" / 5";$("progressBar").style.width=(safeStep/5*100)+"%";$("nextBtn").innerHTML=safeStep===5?'登録してCINEMA DROPへ <b>→</b>':'次へ <b>→</b>';
-  let key=["favorites","tastes","avoid","watchStyle","services"][safeStep-1];
-  box.querySelectorAll(".choice-grid button").forEach(b=>{if(setupSelections[key].includes(b.textContent))b.classList.add("selected")});
+  const key=["favorites","tastes","avoid","watchStyle","services"][safeStep-1];
+  box.querySelectorAll(".choice-grid button").forEach(b=>{
+   const value=b.textContent.trim();
+   b.type="button";
+   b.classList.toggle("selected",(setupSelections[key]||[]).includes(value));
+   b.onclick=function(e){
+    e.preventDefault();e.stopPropagation();
+    setupSelections[key]=setupSelections[key]||[];
+    const selected=!setupSelections[key].includes(value);
+    setupSelections[key]=selected?[...setupSelections[key],value]:setupSelections[key].filter(x=>x!==value);
+    this.classList.toggle("selected",selected);
+    return false;
+   };
+  });
  }
- document.getElementById("stepContent")?.addEventListener("click",e=>{
-  const b=e.target.closest(".choice-grid button"); if(!b)return;
-  e.preventDefault();
-  const key=["favorites","tastes","avoid","watchStyle","services"][safeStep-1]; if(!key)return;
-  const value=b.textContent.trim();
-  setupSelections[key]=setupSelections[key]||[];
-  const selected=!setupSelections[key].includes(value);
-  setupSelections[key]=selected?[...setupSelections[key],value]:setupSelections[key].filter(x=>x!==value);
-  b.classList.toggle("selected",selected);
- });
  function loadProfile(){try{let p=JSON.parse(localStorage.getItem("cinemaDropProfile")||"{}");return {favorites:p.favorites||[],tastes:p.tastes||[],avoid:p.avoid||[],watchStyle:p.watchStyle||[],services:p.services||[],complete:!!p.complete}}catch(e){return {favorites:[],tastes:[],avoid:[],watchStyle:[],services:[],complete:false}}}
  function saveProfile(){let p={...setupSelections,complete:true};localStorage.setItem("cinemaDropProfile",JSON.stringify(p));return p}
  function profileQuery(){
