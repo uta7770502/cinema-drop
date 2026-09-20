@@ -29,18 +29,9 @@
 <section class="era-filter editorial-section"><div class="era-filter-head"><div><small>RELEASE FILTER</small><h2>公開年代で絞り込む</h2></div><label class="latest-switch"><input id="latestFirst" type="checkbox" checked><span></span><b>新着順</b></label></div><div class="era-tabs" id="eraTabs"><button data-era="pre1990">1990以前</button><button data-era="1990">1990年代</button><button data-era="2000">2000年代</button><button data-era="2010">2010年代</button><button data-era="2020">2020年代</button><button class="selected" data-era="latest">最新映画</button></div></section>
 <section class="recommend-section editorial-section"><div class="section-head"><div><h2>あなたへのおすすめ</h2><p>好きな映画から見つけた、今観るべき一本。</p></div><button id="allRecommend">すべて見る　›</button></div><div id="pickupRow" class="poster-strip"></div></section>
 <section class="afterdrop-home editorial-section">
- <div class="afterdrop-kicker"><span>AFTER DROP</span><b>観たあとも、映画を楽しむ。</b></div>
- <div class="section-head"><div><h2>映画の余韻を、もう少し。</h2><p>観た作品から広がる、本・音楽・グッズ・次に観たい一本。</p></div></div>
- <div class="afterdrop-grid">
-  <button data-after="book"><i>BOOK</i><b>原作・関連書籍</b><small>物語をもっと深く知る</small><em>→</em></button>
-  <button data-after="next"><i>NEXT</i><b>次に観たい映画</b><small>この作品が好きなら</small><em>→</em></button>
-  <button data-after="music"><i>MUSIC</i><b>サウンドトラック</b><small>映画の余韻を聴く</small><em>→</em></button>
-  <button data-after="goods"><i>GOODS</i><b>映画グッズ</b><small>お気に入りを手元に</small><em>→</em></button>
-  <button data-after="cast"><i>CAST</i><b>出演俳優</b><small>キャストから作品を広げる</small><em>→</em></button>
-  <button data-after="director"><i>DIRECTOR</i><b>監督・フィルモグラフィ</b><small>作家性をもっと知る</small><em>→</em></button>
-  <button data-after="location"><i>LOCATION</i><b>ロケ地・舞台</b><small>映画の場所をたどる</small><em>→</em></button>
-  <button data-after="trivia"><i>TRIVIA</i><b>制作背景・トリビア</b><small>知るともう一度観たくなる</small><em>→</em></button>
- </div>
+ <div class="afterdrop-kicker"><span>AFTER DROP</span><b>もう一度、作品の余韻へ。</b></div>
+ <div class="section-head"><div><h2>最近開いた映画</h2><p>一度詳細を見た作品だけを表示します。作品ページの一番下からAFTER DROPを楽しめます。</p></div></div>
+ <div id="recentMovies" class="recent-movies"></div>
 </section>
 <section id="subpage" class="subpage hidden"></section>
 <nav>
@@ -49,7 +40,16 @@
 <button class="dropnav" id="dropNav"><i></i><span>DROP</span></button>
 <button data-page="list"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6a5.5 5.5 0 0 0 1-8.8z"/></svg><span>マイリスト</span></button>
 <button data-page="mypage"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 22c.5-5 3.2-8 8-8s7.5 3 8 8"/></svg><span>マイページ</span></button>
-</nav><div class="tmdb-credit">Movie & TV data/images: TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</div></main><section id="detail" class="detail hidden"><div class="detail-inner"><div class="detail-hero" id="detailHero"><button id="closeDetail">←</button><div><small>TODAY’S DROP</small><h2 id="detailTitle">PERFECT DAYS</h2><p id="detailMeta">2023 · 124min · Drama</p></div></div><div class="detail-body"><div class="detail-match"><b id="detailMatch">96%</b><span>AI MATCH<br><small>あなたとの相性</small></span></div><p id="detailReason">静かな日常や、余韻の残る人物ドラマを好むあなたへ。</p><section class="watched-box"><small>YOUR REACTION</small><h3>この映画、観た？</h3><p>感想を残すほど、次のDROPがあなたらしくなります。</p><button id="watchedBtn" class="watched-btn">観た ✓</button><div id="reactionChoices" class="reaction-choices hidden"><button data-reaction="love">大好き</button><button data-reaction="good">よかった</button><button data-reaction="okay">ふつう</button><button data-reaction="bad">合わなかった</button></div><p id="reactionSaved" class="reaction-saved hidden">好みに反映しました ✦</p></section><section class="where"><small>WHERE TO WATCH</small><h3>どこで観る？</h3><div class="watch-tabs"><button class="selected" data-watch="stream">配信</button><button data-watch="rent">レンタル</button><button data-watch="theater">映画館</button></div><div id="watchPanel" class="watch-panel"></div><p class="watch-credit">配信情報はTMDb / JustWatch提供情報を参照しています。最新状況は各サービスでご確認ください。</p></section><section class="after"><small>AFTER DROP</small><h3>観たあとも、映画を楽しむ。</h3><p>この作品が好きなら、こんなものも。</p><div class="goods"><a id="goods1" target="_blank"><i>BOOK</i><span><b>原作・関連書籍</b><small>作品の世界をもっと深く</small></span><em>↗</em></a><a id="goods2" target="_blank"><i>DISC</i><span><b>Blu-ray / 4K UHD</b><small>手元に残して、もう一度</small></span><em>↗</em></a><a id="goods3" target="_blank"><i>GOODS</i><span><b>ポスター・グッズ</b><small>お気に入りをコレクション</small></span><em>↗</em></a></div><p class="affiliate-note">外部の販売サイトへ移動します。商品・価格・在庫は販売先でご確認ください。</p></section></div></div></section><script>
+</nav><div class="tmdb-credit">Movie & TV data/images: TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</div></main><section id="detail" class="detail hidden"><div class="detail-inner"><div class="detail-hero" id="detailHero"><button id="closeDetail">←</button><div><small>TODAY’S DROP</small><h2 id="detailTitle">PERFECT DAYS</h2><p id="detailMeta">2023 · 124min · Drama</p></div></div><div class="detail-body"><div class="detail-match"><b id="detailMatch">96%</b><span>AI MATCH<br><small>あなたとの相性</small></span></div><p id="detailReason">静かな日常や、余韻の残る人物ドラマを好むあなたへ。</p><section class="watched-box"><small>YOUR REACTION</small><h3>この映画、観た？</h3><p>感想を残すほど、次のDROPがあなたらしくなります。</p><button id="watchedBtn" class="watched-btn">観た ✓</button><div id="reactionChoices" class="reaction-choices hidden"><button data-reaction="love">大好き</button><button data-reaction="good">よかった</button><button data-reaction="okay">ふつう</button><button data-reaction="bad">合わなかった</button></div><p id="reactionSaved" class="reaction-saved hidden">好みに反映しました ✦</p></section><section class="where"><small>WHERE TO WATCH</small><h3>どこで観る？</h3><div class="watch-tabs"><button class="selected" data-watch="stream">配信</button><button data-watch="rent">レンタル</button><button data-watch="theater">映画館</button></div><div id="watchPanel" class="watch-panel"></div><p class="watch-credit">配信情報はTMDb / JustWatch提供情報を参照しています。最新状況は各サービスでご確認ください。</p></section><section class="after"><small>AFTER DROP</small><h3>観たあとも、映画を楽しむ。</h3><p>この作品から、もう少し世界を広げる。</p><div class="goods">
+<button data-detail-after="book"><i>BOOK</i><span><b>原作・関連書籍</b><small>物語をもっと深く</small></span><em>→</em></button>
+<button data-detail-after="next"><i>NEXT</i><span><b>次に観たい映画</b><small>この作品が好きなら</small></span><em>→</em></button>
+<button data-detail-after="music"><i>MUSIC</i><span><b>サウンドトラック</b><small>映画の余韻を聴く</small></span><em>→</em></button>
+<button data-detail-after="goods"><i>GOODS</i><span><b>映画グッズ</b><small>お気に入りを手元に</small></span><em>→</em></button>
+<button data-detail-after="cast"><i>CAST</i><span><b>出演俳優</b><small>キャストから作品を広げる</small></span><em>→</em></button>
+<button data-detail-after="director"><i>DIRECTOR</i><span><b>監督・作品歴</b><small>作家性をたどる</small></span><em>→</em></button>
+<button data-detail-after="location"><i>LOCATION</i><span><b>ロケ地・舞台</b><small>映画の場所をたどる</small></span><em>→</em></button>
+<button data-detail-after="trivia"><i>TRIVIA</i><span><b>制作背景・トリビア</b><small>知るともう一度観たくなる</small></span><em>→</em></button>
+</div></section></section></div></div></section><script>
 (function(){
  const $=id=>document.getElementById(id);
  let safeStep=1; let setupSelections={favorites:[],actors:[],tastes:[],avoid:[],watchStyle:[],services:[]}; let currentMovie=null; let recItems=[]; let recIndex=0;
