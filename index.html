@@ -49,7 +49,13 @@
 <button data-detail-after="director"><i>DIRECTOR</i><span><b>監督・作品歴</b><small>作家性をたどる</small></span><em>→</em></button>
 <button data-detail-after="location"><i>LOCATION</i><span><b>ロケ地・舞台</b><small>映画の場所をたどる</small></span><em>→</em></button>
 <button data-detail-after="trivia"><i>TRIVIA</i><span><b>制作背景・トリビア</b><small>知るともう一度観たくなる</small></span><em>→</em></button>
-</div></section></section></div></div></section><script>
+</div></section></section></div></div><nav class="detail-nav">
+<button class="active" data-page="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H5V11"/><path d="M9 21v-6h6v6"/></svg><span>ホーム</span></button>
+<button data-page="search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><span>さがす</span></button>
+<button class="dropnav" id="dropNav"><i></i><span>DROP</span></button>
+<button data-page="list"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6a5.5 5.5 0 0 0 1-8.8z"/></svg><span>マイリスト</span></button>
+<button data-page="mypage"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 22c.5-5 3.2-8 8-8s7.5 3 8 8"/></svg><span>マイページ</span></button>
+</nav></section><script>
 (function(){
  const $=id=>document.getElementById(id);
  let safeStep=1; let setupSelections={favorites:[],actors:[],tastes:[],avoid:[],watchStyle:[],services:[]}; let currentMovie=null; let recItems=[]; let recIndex=0;
@@ -206,7 +212,7 @@
  $("skipBtn")?.addEventListener("click",()=>{$("welcome").classList.add("hidden");$("setup").classList.add("hidden");$("home").classList.remove("hidden");fallbackPage("home")});
  $("nextBtn")?.addEventListener("click",e=>{if($("setup").classList.contains("hidden"))return;e.stopImmediatePropagation();if(safeStep<6){safeStep++;drawSetup()}else{saveProfile();$("setup").classList.add("hidden");$("home").classList.remove("hidden");fallbackPage("home")}},true);
  $("backBtn")?.addEventListener("click",e=>{if(safeStep>1){e.stopImmediatePropagation();safeStep--;drawSetup()}else{$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")}},true);
- document.querySelectorAll("nav button[data-page]").forEach(b=>b.addEventListener("click",e=>{e.stopImmediatePropagation();fallbackPage(b.dataset.page)},true));
+ document.querySelectorAll("nav button[data-page]").forEach(b=>b.addEventListener("click",e=>{e.stopImmediatePropagation();if(b.closest("#detail")){$("detail").classList.add("hidden");$("home").classList.remove("hidden")}fallbackPage(b.dataset.page)},true));
  function openSafeDetail(){let d=$("detail");if(!d)return;$("detailTitle").textContent=$("title").textContent;$("detailMeta").textContent=$("meta").textContent;$("detailMatch").textContent=$("match").textContent;$("detailReason").textContent=$("reason").textContent;d.classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0)}
  $("detailBtn")?.addEventListener("click",e=>{e.stopImmediatePropagation();openSafeDetail()},true);
  $("closeDetail")?.addEventListener("click",e=>{e.stopImmediatePropagation();$("detail").classList.add("hidden");$("home").classList.remove("hidden");renderRecentMovies();window.scrollTo(0,0)},true);
