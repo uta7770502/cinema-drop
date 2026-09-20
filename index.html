@@ -126,4 +126,15 @@
  $("moodReset")?.addEventListener("click",()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));recommendForProfile()});
 
 })();
+</script><script>
+(function(){
+let era="latest",newest=true;
+const yr=x=>{let m=String(x&&x.date||"").match(/[12][0-9][0-9][0-9]/);return Number(m?m[0]:0)};
+const pass=y=>era==="pre1990"?y&&y<1990:era==="1990"?y>=1990&&y<2000:era==="2000"?y>=2000&&y<2010:era==="2010"?y>=2010&&y<2020:era==="2020"?y>=2020&&y<2030:y>=2024;
+async function go(){let qs=era==="latest"?["2026","2025","新作映画"]:["映画"],all=[];for(let q of qs){try{let r=await fetch("/api/search?q="+encodeURIComponent(q)),d=await r.json();all=all.concat(d.results||[])}catch(e){}}
+let seen=new Set(),a=all.filter(x=>x.type==="movie"&&pass(yr(x))&&!seen.has(x.id)&&(seen.add(x.id)||true));if(newest)a.sort((x,y)=>yr(y)-yr(x));
+let row=document.getElementById("pickupRow");if(row)row.innerHTML=a.slice(0,8).map(x=>'<button class="era-card"><span style="background-image:url('+x.poster+')"></span><b>'+x.title+'</b><small>'+yr(x)+'</small></button>').join("");
+let x=a[0],t=document.getElementById("comingTitle"),v=document.querySelector(".theater-visual");if(x&&t)t.textContent=x.title;if(x&&v&&x.poster)v.style.backgroundImage='url("'+x.poster+'")'}
+document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("click",()=>{era=b.dataset.era;document.querySelectorAll("#eraTabs button").forEach(z=>z.classList.toggle("selected",z===b));go()}));let sw=document.getElementById("latestFirst");if(sw)sw.addEventListener("change",()=>{newest=sw.checked;go()});setTimeout(go,350)
+})();
 </script></body></html>
