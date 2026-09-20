@@ -96,7 +96,7 @@
   if($("comingTitle"))$("comingTitle").textContent=x.title;
   if($("comingCard")&&x.backdrop)$("comingCard").style.setProperty("--coming-bg",'url("'+x.backdrop+'")');
  }
- async function openCurrentDetail(){if(!currentMovie)return;
+ window.cinemaDropOpenDetail=function(movie){if(!movie)return;currentMovie=movie;openCurrentDetail()};\n async function openCurrentDetail(){if(!currentMovie)return;
   $("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);
   if(currentMovie.backdrop)$("detailHero").style.background='linear-gradient(0deg,rgba(0,0,0,.72),transparent 65%),url("'+currentMovie.backdrop+'") center/cover no-repeat';
   $("detail").classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0);
@@ -211,7 +211,7 @@ document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("clic
  function unique(a){let s=new Set();return a.filter(x=>x.type==="movie"&&!s.has(x.id)&&(s.add(x.id)||true))}
  function mount(kind,items){
   let idx=0,isTheater=kind==="theater",box=document.getElementById(isTheater?"theaterSlider":"streamSlider"),dots=document.getElementById(isTheater?"heroDots":"streamDots");
-  const render=()=>{let x=items[idx];if(!x||!box)return;let bg=x.backdrop||x.poster||"";box.innerHTML='<div class="dual-slide" style="background-image:linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.12)),url('+bg+')"><div class="dual-copy"><h2>'+x.title+'</h2><p>'+(x.overview||"今観たいおすすめの一本。")+'</p><div class="dual-tags"><span>'+(isTheater?"THEATER":"STREAMING")+'</span><span>'+yr(x)+'</span></div><button class="dual-watch">▶　作品を見る</button></div><strong class="dual-count">'+(idx+1)+' / '+items.length+'</strong></div>';if(dots)dots.innerHTML=items.map((_,i)=>'<button class="'+(i===idx?"on":"")+'"></button>').join("");dots?.querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{idx=i;render()});box.querySelector(".dual-watch")?.addEventListener("click",()=>{window.dispatchEvent(new CustomEvent("cinemaDropOpenMovie",{detail:x}))})};
+  const render=()=>{let x=items[idx];if(!x||!box)return;let bg=x.backdrop||x.poster||"";box.innerHTML='<div class="dual-slide" style="background-image:linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.12)),url('+bg+')"><div class="dual-copy"><h2>'+x.title+'</h2><p>'+(x.overview||"今観たいおすすめの一本。")+'</p><div class="dual-tags"><span>'+(isTheater?"THEATER":"STREAMING")+'</span><span>'+yr(x)+'</span></div><button class="dual-watch">▶　作品を見る</button></div><strong class="dual-count">'+(idx+1)+' / '+items.length+'</strong></div>';if(dots)dots.innerHTML=items.map((_,i)=>'<button class="'+(i===idx?"on":"")+'"></button>').join("");dots?.querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{idx=i;render()});box.querySelector(".dual-watch")?.addEventListener("click",()=>{window.cinemaDropOpenDetail?.(x)})};
   document.getElementById(isTheater?"heroPrev":"streamPrev")?.addEventListener("click",()=>{idx=(idx-1+items.length)%items.length;render()});
   document.getElementById(isTheater?"heroNext":"streamNext")?.addEventListener("click",()=>{idx=(idx+1)%items.length;render()});render()
  }
