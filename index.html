@@ -48,19 +48,20 @@
 </nav><div class="tmdb-credit">Movie & TV data/images: TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</div></main><section id="detail" class="detail hidden"><div class="detail-inner"><div class="detail-hero" id="detailHero"><button id="closeDetail">←</button><div><small>TODAY’S DROP</small><h2 id="detailTitle">PERFECT DAYS</h2><p id="detailMeta">2023 · 124min · Drama</p></div></div><div class="detail-body"><div class="detail-match"><b id="detailMatch">96%</b><span>AI MATCH<br><small>あなたとの相性</small></span></div><p id="detailReason">静かな日常や、余韻の残る人物ドラマを好むあなたへ。</p><section class="watched-box"><small>YOUR REACTION</small><h3>この映画、観た？</h3><p>感想を残すほど、次のDROPがあなたらしくなります。</p><button id="watchedBtn" class="watched-btn">観た ✓</button><div id="reactionChoices" class="reaction-choices hidden"><button data-reaction="love">大好き</button><button data-reaction="good">よかった</button><button data-reaction="okay">ふつう</button><button data-reaction="bad">合わなかった</button></div><p id="reactionSaved" class="reaction-saved hidden">好みに反映しました ✦</p></section><section class="where"><small>WHERE TO WATCH</small><h3>どこで観る？</h3><div class="watch-tabs"><button class="selected" data-watch="stream">配信</button><button data-watch="rent">レンタル</button><button data-watch="theater">映画館</button></div><div id="watchPanel" class="watch-panel"></div><p class="watch-credit">配信情報はTMDb / JustWatch提供情報を参照しています。最新状況は各サービスでご確認ください。</p></section><section class="after"><small>AFTER DROP</small><h3>観たあとも、映画を楽しむ。</h3><p>この作品が好きなら、こんなものも。</p><div class="goods"><a id="goods1" target="_blank"><i>BOOK</i><span><b>原作・関連書籍</b><small>作品の世界をもっと深く</small></span><em>↗</em></a><a id="goods2" target="_blank"><i>DISC</i><span><b>Blu-ray / 4K UHD</b><small>手元に残して、もう一度</small></span><em>↗</em></a><a id="goods3" target="_blank"><i>GOODS</i><span><b>ポスター・グッズ</b><small>お気に入りをコレクション</small></span><em>↗</em></a></div><p class="affiliate-note">外部の販売サイトへ移動します。商品・価格・在庫は販売先でご確認ください。</p></section></div></div></section><script>
 (function(){
  const $=id=>document.getElementById(id);
- let safeStep=1; let setupSelections={favorites:[],tastes:[],avoid:[],watchStyle:[],services:[]}; let currentMovie=null; let recItems=[]; let recIndex=0;
+ let safeStep=1; let setupSelections={favorites:[],actors:[],tastes:[],avoid:[],watchStyle:[],services:[]}; let currentMovie=null; let recItems=[]; let recIndex=0;
  const setupData=[
   '<div class="setup-copy"><small>01 · YOUR FAVORITES</small><h2>好きな作品を教えてください。</h2><p>3本以上選ぶほど、あなたらしい推薦になります。作品名から検索もできます。</p></div><div class="work-search"><span>⌕</span><input id="safeWorkQuery" placeholder="作品名を検索"></div><div class="choice-grid"><button>ゴジラ-1.0</button><button>インターステラー</button><button>PERFECT DAYS</button><button>君の名は。</button><button>進撃の巨人</button><button>チェンソーマン</button><button>パラサイト 半地下の家族</button><button>ラ・ラ・ランド</button><button>ショーシャンクの空に</button><button>グランド・ブダペスト・ホテル</button></div>',
-  '<div class="setup-copy"><small>02 · YOUR TASTE</small><h2>どんな映画に惹かれますか？</h2><p>ジャンルだけでなく「映画の味」を選んでください。複数選択できます。</p></div><div class="choice-grid"><button>SF</button><button>サスペンス</button><button>ミステリー</button><button>アクション</button><button>人間ドラマ</button><button>コメディ</button><button>恋愛</button><button>アニメ</button><button>実話・伝記</button><button>映像美</button><button>どんでん返し</button><button>泣ける</button><button>テンポが良い</button><button>考察したくなる</button><button>余韻が残る</button><button>家族で楽しめる</button></div>',
-  '<div class="setup-copy"><small>03 · NOT FOR YOU</small><h2>おすすめから外したいものは？</h2><p>苦手な要素を避けるほど、ハズレを減らせます。</p></div><div class="choice-grid"><button>怖すぎる映画</button><button>残酷な描写</button><button>重すぎる話</button><button>恋愛中心</button><button>子ども向け</button><button>難解すぎる</button><button>古い映画</button><button>特になし</button></div>',
-  '<div class="setup-copy"><small>04 · WATCH STYLE</small><h2>普段、どんな観方をしますか？</h2><p>上映時間や新旧の好みも推薦に反映します。</p></div><div class="choice-grid"><button>90分くらいが好き</button><button>2時間以内</button><button>長編もOK</button><button>新作中心</button><button>旧作も好き</button><button>字幕派</button><button>吹替派</button><button>ひとりで観る</button><button>家族・友人と観る</button></div>',
-  '<div class="setup-copy"><small>05 · YOUR SCREEN</small><h2>どこで観ますか？</h2><p>映画館と利用中の配信サービスを選んでください。</p></div><div class="choice-grid"><button>映画館</button><button>Netflix</button><button>Prime Video</button><button>U-NEXT</button><button>Disney+</button><button>Apple TV+</button><button>Hulu</button><button>レンタルもOK</button><button>どこでもOK</button></div>'
+  '<div class="setup-copy"><small>02 · FAVORITE ACTORS</small><h2>好きな俳優を教えてください。</h2><p>名前で検索して選べます。好きな俳優の出演作もおすすめに反映します。</p></div><div class="work-search"><span>⌕</span><input id="actorQuery" placeholder="俳優名を検索"></div><div id="actorResults" class="choice-grid"><button>菅田将暉</button><button>役所広司</button><button>綾瀬はるか</button><button>山田裕貴</button><button>長澤まさみ</button><button>ティモシー・シャラメ</button><button>エマ・ストーン</button><button>レオナルド・ディカプリオ</button></div>',
+  '<div class="setup-copy"><small>03 · YOUR TASTE</small><h2>どんな映画に惹かれますか？</h2><p>ジャンルだけでなく「映画の味」を選んでください。複数選択できます。</p></div><div class="choice-grid"><button>SF</button><button>サスペンス</button><button>ミステリー</button><button>アクション</button><button>人間ドラマ</button><button>コメディ</button><button>恋愛</button><button>アニメ</button><button>実話・伝記</button><button>映像美</button><button>どんでん返し</button><button>泣ける</button><button>テンポが良い</button><button>考察したくなる</button><button>余韻が残る</button><button>家族で楽しめる</button></div>',
+  '<div class="setup-copy"><small>04 · NOT FOR YOU</small><h2>おすすめから外したいものは？</h2><p>苦手な要素を避けるほど、ハズレを減らせます。</p></div><div class="choice-grid"><button>怖すぎる映画</button><button>残酷な描写</button><button>重すぎる話</button><button>恋愛中心</button><button>子ども向け</button><button>難解すぎる</button><button>古い映画</button><button>特になし</button></div>',
+  '<div class="setup-copy"><small>05 · WATCH STYLE</small><h2>普段、どんな観方をしますか？</h2><p>上映時間や新旧の好みも推薦に反映します。</p></div><div class="choice-grid"><button>90分くらいが好き</button><button>2時間以内</button><button>長編もOK</button><button>新作中心</button><button>旧作も好き</button><button>字幕派</button><button>吹替派</button><button>ひとりで観る</button><button>家族・友人と観る</button></div>',
+  '<div class="setup-copy"><small>06 · YOUR SCREEN</small><h2>どこで観ますか？</h2><p>映画館と利用中の配信サービスを選んでください。</p></div><div class="choice-grid"><button>映画館</button><button>Netflix</button><button>Prime Video</button><button>U-NEXT</button><button>Disney+</button><button>Apple TV+</button><button>Hulu</button><button>レンタルもOK</button><button>どこでもOK</button></div>'
  ]
  window.cinemaDropStartSetup=function(){safeStep=1;drawSetup()};
  function drawSetup(){
   let box=$("stepContent");if(!box)return;
-  box.innerHTML=setupData[safeStep-1];$("stepNo").textContent=safeStep+" / 5";$("progressBar").style.width=(safeStep/5*100)+"%";$("nextBtn").innerHTML=safeStep===5?'登録してCINEMA DROPへ <b>→</b>':'次へ <b>→</b>';
-  const key=["favorites","tastes","avoid","watchStyle","services"][safeStep-1];
+  box.innerHTML=setupData[safeStep-1];$("stepNo").textContent=safeStep+" / 6";$("progressBar").style.width=(safeStep/6*100)+"%";$("nextBtn").innerHTML=safeStep===6?'登録してCINEMA DROPへ <b>→</b>':'次へ <b>→</b>';
+  const key=["favorites","actors","tastes","avoid","watchStyle","services"][safeStep-1];
   box.querySelectorAll(".choice-grid button").forEach(b=>{
    const value=b.textContent.trim();
    b.type="button";
@@ -74,11 +75,15 @@
     return false;
    };
   });
+  if(safeStep===2){
+   const input=$("actorQuery"),results=$("actorResults");let timer;
+   if(input)input.oninput=()=>{clearTimeout(timer);timer=setTimeout(async()=>{let q=input.value.trim();if(!q)return;try{let r=await fetch("/api/search?person="+encodeURIComponent(q)),d=await r.json(),people=d.people||[];if(!people.length)return;results.innerHTML=people.slice(0,12).map(p=>'<button type="button" data-name="'+String(p.name).replace(/"/g,"&quot;")+'">'+p.name+'</button>').join("");results.querySelectorAll("button").forEach(b=>{let value=b.dataset.name;b.classList.toggle("selected",setupSelections.actors.includes(value));b.onclick=e=>{e.preventDefault();let on=!setupSelections.actors.includes(value);setupSelections.actors=on?[...setupSelections.actors,value]:setupSelections.actors.filter(x=>x!==value);b.classList.toggle("selected",on)}})}catch(e){}},300)};
+  }
  }
- function loadProfile(){try{let p=JSON.parse(localStorage.getItem("cinemaDropProfile")||"{}");return {favorites:p.favorites||[],tastes:p.tastes||[],avoid:p.avoid||[],watchStyle:p.watchStyle||[],services:p.services||[],complete:!!p.complete}}catch(e){return {favorites:[],tastes:[],avoid:[],watchStyle:[],services:[],complete:false}}}
+ function loadProfile(){try{let p=JSON.parse(localStorage.getItem("cinemaDropProfile")||"{}");return {favorites:p.favorites||[],actors:p.actors||[],tastes:p.tastes||[],avoid:p.avoid||[],watchStyle:p.watchStyle||[],services:p.services||[],complete:!!p.complete}}catch(e){return {favorites:[],actors:[],tastes:[],avoid:[],watchStyle:[],services:[],complete:false}}}
  function saveProfile(){let p={...setupSelections,complete:true};localStorage.setItem("cinemaDropProfile",JSON.stringify(p));return p}
  function profileQuery(){
-   let p=loadProfile(),terms=[...(p.tastes||[])],f=(p.favorites||[]).join(" ");
+   let p=loadProfile(),terms=[...(p.actors||[]).slice(0,2),...(p.tastes||[])],f=(p.favorites||[]).join(" ");
    if(/インターステラー|ゴジラ|進撃/.test(f))terms.push("SF","アクション");
    if(/PERFECT DAYS|ショーシャンク/.test(f))terms.push("人間ドラマ","余韻");
    if(/君の名は|チェンソーマン/.test(f))terms.push("アニメ");
@@ -159,7 +164,7 @@
   if(page==="list")sub.innerHTML='<div class="sub-head"><small>MY CINEMA</small><h2>マイリスト</h2><p>気になった映画を、あとで観るために。</p></div>'+(saved.length?saved.map(x=>'<div class="saved-row"><b>'+x+'</b><span>保存済み ♡</span></div>').join(""):'<div class="empty-card"><h3>まだ保存した作品はありません。</h3><p>TODAY’S DROPの♡から追加できます。</p></div>');
   if(page==="mypage")sub.innerHTML='<div class="sub-head"><small>YOUR PROFILE</small><h2>マイページ</h2><p>CINEMA DROPが覚えている、あなたの映画の好み。</p></div><div class="profile-block"><small>好きな作品</small><p>'+((p.favorites||[]).join("・")||"未登録")+'</p></div><div class="profile-block"><small>苦手</small><p>'+((p.avoid||[]).join("・")||"未登録")+'</p></div><div class="profile-block"><small>観る環境</small><p>'+((p.services||[]).join("・")||"未登録")+'</p></div><button id="safeEdit" class="edit-profile">好みを編集する →</button>';
   window.scrollTo(0,0);
-  if(page==="mypage"&&$("safeEdit"))$("safeEdit").onclick=()=>{setupSelections={favorites:[...(p.favorites||[])],tastes:[...(p.tastes||[])],avoid:[...(p.avoid||[])],watchStyle:[...(p.watchStyle||[])],services:[...(p.services||[])]};safeStep=1;$("home").classList.add("hidden");$("setup").classList.remove("hidden");drawSetup()};
+  if(page==="mypage"&&$("safeEdit"))$("safeEdit").onclick=()=>{setupSelections={favorites:[...(p.favorites||[])],actors:[...(p.actors||[])],tastes:[...(p.tastes||[])],avoid:[...(p.avoid||[])],watchStyle:[...(p.watchStyle||[])],services:[...(p.services||[])]};safeStep=1;$("home").classList.add("hidden");$("setup").classList.remove("hidden");drawSetup()};
   if(page==="search"){
     let q=$("conciergeQuery"),out=$("conciergeResults");
     async function safeSearch(term){
@@ -176,10 +181,10 @@
     if(q){let t;q.oninput=()=>{clearTimeout(t);t=setTimeout(()=>safeSearch(q.value),500)}}
   }
  }
- function startOnboarding(){let p=loadProfile();setupSelections={favorites:[...(p.favorites||[])],tastes:[...(p.tastes||[])],avoid:[...(p.avoid||[])],watchStyle:[...(p.watchStyle||[])],services:[...(p.services||[])]};safeStep=1;$("welcome").classList.add("hidden");$("home").classList.add("hidden");$("setup").classList.remove("hidden");drawSetup()}
+ function startOnboarding(){let p=loadProfile();setupSelections={favorites:[...(p.favorites||[])],actors:[...(p.actors||[])],tastes:[...(p.tastes||[])],avoid:[...(p.avoid||[])],watchStyle:[...(p.watchStyle||[])],services:[...(p.services||[])]};safeStep=1;$("welcome").classList.add("hidden");$("home").classList.add("hidden");$("setup").classList.remove("hidden");drawSetup()}
  $("startBtn")?.addEventListener("click",startOnboarding);
  $("skipBtn")?.addEventListener("click",()=>{$("welcome").classList.add("hidden");$("setup").classList.add("hidden");$("home").classList.remove("hidden");fallbackPage("home")});
- $("nextBtn")?.addEventListener("click",e=>{if($("setup").classList.contains("hidden"))return;e.stopImmediatePropagation();if(safeStep<5){safeStep++;drawSetup()}else{saveProfile();$("setup").classList.add("hidden");$("home").classList.remove("hidden");fallbackPage("home")}},true);
+ $("nextBtn")?.addEventListener("click",e=>{if($("setup").classList.contains("hidden"))return;e.stopImmediatePropagation();if(safeStep<6){safeStep++;drawSetup()}else{saveProfile();$("setup").classList.add("hidden");$("home").classList.remove("hidden");fallbackPage("home")}},true);
  $("backBtn")?.addEventListener("click",e=>{if(safeStep>1){e.stopImmediatePropagation();safeStep--;drawSetup()}else{$("setup").classList.add("hidden");$("welcome").classList.remove("hidden")}},true);
  document.querySelectorAll("nav button[data-page]").forEach(b=>b.addEventListener("click",e=>{e.stopImmediatePropagation();fallbackPage(b.dataset.page)},true));
  function openSafeDetail(){let d=$("detail");if(!d)return;$("detailTitle").textContent=$("title").textContent;$("detailMeta").textContent=$("meta").textContent;$("detailMatch").textContent=$("match").textContent;$("detailReason").textContent=$("reason").textContent;d.classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0)}
