@@ -111,7 +111,10 @@
   if($("comingCard")&&x.backdrop)$("comingCard").style.setProperty("--coming-bg",'url("'+x.backdrop+'")');
  }
  window.cinemaDropOpenDetail=function(movie){if(!movie)return;currentMovie=movie;openCurrentDetail()};
+ function rememberOpenedMovie(m){try{let a=JSON.parse(localStorage.getItem("cinemaDropOpened")||"[]");a=a.filter(x=>!(x.id===m.id&&x.type===m.type));a.unshift({id:m.id,type:m.type||"movie",title:m.title,date:m.date||"",poster:m.poster||"",backdrop:m.backdrop||"",rating:m.rating||0});localStorage.setItem("cinemaDropOpened",JSON.stringify(a.slice(0,8)));renderRecentMovies()}catch(e){}}
+ function renderRecentMovies(){let box=$("recentMovies");if(!box)return;let a=[];try{a=JSON.parse(localStorage.getItem("cinemaDropOpened")||"[]")}catch(e){}box.innerHTML=a.length?a.map((m,i)=>'<button data-opened="'+i+'">'+(m.poster?'<img src="'+m.poster+'" alt="">':'<span class="recent-placeholder">DROP</span>')+'<span><b>'+m.title+'</b><small>'+String(m.date||"").slice(0,4)+' · AFTER DROPを見る</small></span><em>→</em></button>').join(""):'<div class="recent-empty">映画の詳細ページを開くと、ここに表示されます。</div>';box.querySelectorAll("[data-opened]").forEach(b=>b.onclick=()=>{currentMovie=a[+b.dataset.opened];openCurrentDetail()})}
  async function openCurrentDetail(){if(!currentMovie)return;
+  rememberOpenedMovie(currentMovie);
   $("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);
   if(currentMovie.backdrop)$("detailHero").style.background='linear-gradient(0deg,rgba(0,0,0,.72),transparent 65%),url("'+currentMovie.backdrop+'") center/cover no-repeat';
   $("detail").classList.remove("hidden");$("home").classList.add("hidden");window.scrollTo(0,0);
@@ -134,16 +137,10 @@
   p.innerHTML=list.length?list.map(v=>'<a class="provider-row" target="_blank" href="'+(w.link||"#")+'">'+(v.logo?'<img src="'+v.logo+'" alt="">':'')+'<span><b>'+v.name+'</b><small>'+(kind==="stream"?"見放題・配信情報":"レンタル情報")+'</small></span><em>↗</em></a>').join(""):'<div class="provider-row"><span><b>現在、日本で確認できる'+(kind==="stream"?"配信":"レンタル")+'情報はありません</b><small>配信状況は変更される場合があります。</small></span></div>';
  }
  function renderAfterDrop(){
-  if(!currentMovie)return;let t=currentMovie.title,q=encodeURIComponent(t),rec=(currentMovie.recommendations||[])[0];
-  let g1=$("goods1"),g2=$("goods2"),g3=$("goods3");
-  if(g1){g1.href="https://www.google.com/search?q="+encodeURIComponent(t+" 原作 本");g1.querySelector("b").textContent=t+" の原作・関連書籍"}
-  if(g2){g2.href="https://www.google.com/search?q="+encodeURIComponent(t+" サウンドトラック Blu-ray");g2.querySelector("b").textContent="音楽・Blu-ray / 4K UHD";g2.querySelector("i").textContent="MUSIC"}
-  if(g3){g3.href="https://www.google.com/search?q="+encodeURIComponent(t+" 映画 グッズ 公式");g3.querySelector("b").textContent=t+" の映画グッズ"}
-  let after=document.querySelector("#detail .after");if(after&&rec){
-   let old=after.querySelector(".after-next");if(old)old.remove();
-   let a=document.createElement("button");a.className="after-next";a.innerHTML='<i>NEXT</i><span><b>次に観たい一本</b><small>'+rec.title+' · '+String(rec.date||"").slice(0,4)+'</small></span><em>→</em>';a.onclick=()=>{currentMovie=rec;openCurrentDetail()};after.querySelector(".goods").appendChild(a)
-  }
+  if(!currentMovie)return;
+  document.querySelectorAll("#detail [data-detail-after]").forEach(b=>b.onclick=()=>openAfterDrop(b.dataset.detailAfter));
  }
+
  function openAfterDrop(kind){
   let m=currentMovie||recItems[0];if(!m)return;
   let sub=$("subpage"),t=m.title||"この作品",q=encodeURIComponent(t),credits=m.credits||{},recs=m.recommendations||[];
@@ -162,7 +159,7 @@
   }
   sub.querySelectorAll("[data-rec]").forEach(b=>b.onclick=()=>{currentMovie=recs[+b.dataset.rec];openCurrentDetail()});
  }
- document.querySelectorAll(".afterdrop-home [data-after]").forEach(b=>b.onclick=()=>openAfterDrop(b.dataset.after));
+ renderRecentMovies();
  async function recommendForProfile(q){
    try{
     let p=loadProfile(),terms=q?[q]:[...(p.tastes||[]).slice(0,3),...(p.favorites||[]).slice(0,2),profileQuery()].filter(Boolean);
@@ -180,7 +177,7 @@
  function fallbackPage(page){
   let sub=$("subpage");if(!sub)return;
   document.querySelectorAll("nav button[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
-  if(page==="home"){sub.classList.add("hidden");homeSections(true);recommendForProfile();window.scrollTo(0,0);return}
+  if(page==="home"){sub.classList.add("hidden");homeSections(true);renderRecentMovies();recommendForProfile();window.scrollTo(0,0);return}
   homeSections(false);sub.classList.remove("hidden");
   let p=JSON.parse(localStorage.getItem("cinemaDropProfile")||'{"favorites":[],"avoid":[],"services":[]}'),saved=JSON.parse(localStorage.getItem("cinemaDropSaved")||"[]");
   if(page==="search")sub.innerHTML='<div class="sub-head"><small>DISCOVER</small><h2>さがす</h2><p>今の気分を、そのまま入力してください。</p></div><div class="big-search"><span>⌕ </span><input id="conciergeQuery" placeholder="例：怖すぎないサスペンス"></div><div class="discover-tags"><button>90分以内</button><button>映像がすごい</button><button>泣ける</button><button>サスペンス</button></div><div id="conciergeResults" class="concierge-results"><div class="empty-card"><b>AI CONCIERGE</b><h3>「今夜、何観る？」をそのまま入力</h3><p>好みと気分から候補を探します。</p></div></div>';
