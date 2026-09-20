@@ -163,7 +163,7 @@ document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("clic
  async function load(mood){
   let theater,streaming;
   if(mood){
-   let [moodData,theaterData,streamData]=await Promise.all([query(mood,"mood"),query("","now_playing"),query("","streaming")]);
+   let [moodData,theaterData,streamData]=await Promise.all([fetch("/api/search?mood="+encodeURIComponent(mood)).then(r=>r.json()).then(d=>d.results||[]).catch(()=>[]),query("","now_playing"),query("","streaming")]);
    let moodIds=new Set(unique(moodData).map(x=>x.id));
    theater=unique(theaterData).filter(x=>(x.poster||x.backdrop)&&moodIds.has(x.id)).slice(0,4);
    streaming=unique(streamData).filter(x=>(x.poster||x.backdrop)&&moodIds.has(x.id)).slice(0,4);
