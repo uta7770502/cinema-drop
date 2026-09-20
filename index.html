@@ -192,7 +192,8 @@
  $("moodReset")?.addEventListener("click",()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));recommendForProfile()});
 
 })();
-</script><script>
+
+ window.addEventListener("cinemaDropOpenMovie",e=>{if(!e.detail)return;currentMovie=e.detail;openCurrentDetail()});</script><script>
 (function(){
 let era="latest",newest=true;
 const yr=x=>{let m=String(x&&x.date||"").match(/[12][0-9][0-9][0-9]/);return Number(m?m[0]:0)};
@@ -210,7 +211,7 @@ document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("clic
  function unique(a){let s=new Set();return a.filter(x=>x.type==="movie"&&!s.has(x.id)&&(s.add(x.id)||true))}
  function mount(kind,items){
   let idx=0,isTheater=kind==="theater",box=document.getElementById(isTheater?"theaterSlider":"streamSlider"),dots=document.getElementById(isTheater?"heroDots":"streamDots");
-  const render=()=>{let x=items[idx];if(!x||!box)return;let bg=x.backdrop||x.poster||"";box.innerHTML='<div class="dual-slide" style="background-image:linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.12)),url('+bg+')"><div class="dual-copy"><h2>'+x.title+'</h2><p>'+(x.overview||"今観たいおすすめの一本。")+'</p><div class="dual-tags"><span>'+(isTheater?"THEATER":"STREAMING")+'</span><span>'+yr(x)+'</span></div><button class="dual-watch">▶　作品を見る</button></div><strong class="dual-count">'+(idx+1)+' / '+items.length+'</strong></div>';if(dots)dots.innerHTML=items.map((_,i)=>'<button class="'+(i===idx?"on":"")+'"></button>').join("");dots?.querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{idx=i;render()});box.querySelector(".dual-watch")?.addEventListener("click",()=>{location.hash="detail"})};
+  const render=()=>{let x=items[idx];if(!x||!box)return;let bg=x.backdrop||x.poster||"";box.innerHTML='<div class="dual-slide" style="background-image:linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.12)),url('+bg+')"><div class="dual-copy"><h2>'+x.title+'</h2><p>'+(x.overview||"今観たいおすすめの一本。")+'</p><div class="dual-tags"><span>'+(isTheater?"THEATER":"STREAMING")+'</span><span>'+yr(x)+'</span></div><button class="dual-watch">▶　作品を見る</button></div><strong class="dual-count">'+(idx+1)+' / '+items.length+'</strong></div>';if(dots)dots.innerHTML=items.map((_,i)=>'<button class="'+(i===idx?"on":"")+'"></button>').join("");dots?.querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{idx=i;render()});box.querySelector(".dual-watch")?.addEventListener("click",()=>{window.dispatchEvent(new CustomEvent("cinemaDropOpenMovie",{detail:x}))})};
   document.getElementById(isTheater?"heroPrev":"streamPrev")?.addEventListener("click",()=>{idx=(idx-1+items.length)%items.length;render()});
   document.getElementById(isTheater?"heroNext":"streamNext")?.addEventListener("click",()=>{idx=(idx+1)%items.length;render()});render()
  }
