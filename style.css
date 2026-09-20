@@ -253,3 +253,15 @@ body:has(#detail:not(.hidden))>.detail-nav-fixed{display:grid!important}
 .detail-nav-fixed .dropnav{color:#ef584f!important}
 
 .detail-nav-fixed.show{display:grid!important}
+
+/* AFTER DROP / detail mobile repair */
+#detail .after .goods button{justify-content:flex-start!important;padding:18px 16px 42px!important;min-height:128px!important}
+#detail .after .goods button i{position:static!important;display:block!important;margin:0 0 12px!important;line-height:1!important;font-size:9px!important;letter-spacing:.18em!important}
+#detail .after .goods button span{display:block!important}
+#detail .after .goods button b{margin:0!important;font-size:14px!important;line-height:1.35!important}
+#detail .after .goods button small{margin-top:7px!important;font-size:10px!important;line-height:1.45!important}
+.detail-nav-fixed{left:0!important;right:0!important;bottom:0!important;transform:none!important;width:100%!important;max-width:none!important;height:72px!important;box-sizing:border-box!important;padding:6px 8px calc(6px + env(safe-area-inset-bottom))!important}
+.detail-nav-fixed.show{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.detail-nav-fixed button{width:100%!important;padding:0!important;writing-mode:horizontal-tb!important;white-space:nowrap!important}
+.detail-nav-fixed button span{writing-mode:horizontal-tb!important;white-space:nowrap!important}
+#detail,.after-page{padding-bottom:110px!important}
