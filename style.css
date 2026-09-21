@@ -291,3 +291,5 @@ body:has(#detail:not(.hidden))>.detail-nav-fixed{display:grid!important}
 .archive-search-tabs{display:flex;gap:8px;margin:16px 0 12px}.archive-search-tabs button{flex:1;border:1px solid #ddd2c4;background:#fffaf3;border-radius:999px;padding:11px;font-size:12px}.archive-search-tabs button.selected{background:#171717;color:#fff;border-color:#171717}
 .memory-lead{font-size:12px;color:#777;margin:5px 0 10px}.archive-add-panel textarea{box-sizing:border-box;width:100%;min-height:105px;resize:none;border:1px solid #ddd2c4;border-radius:16px;background:#fff;padding:14px;font:14px/1.7 sans-serif}
 .memory-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.memory-row select{width:100%;border:1px solid #ddd2c4;border-radius:12px;background:#fff;padding:11px;font-size:12px}.memory-search-btn{width:100%;border:0;border-radius:999px;background:#171717;color:#fff;padding:14px;font-weight:700}
+
+.archive-entry-split u{pointer-events:auto;cursor:pointer}.archive-entry-split u:last-child{background:#292929;color:#fff;border-color:#666}
