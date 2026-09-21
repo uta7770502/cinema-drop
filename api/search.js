@@ -1,9 +1,14 @@
 export default async function handler(req,res){
  const token=process.env.TMDB_READ_TOKEN;if(!token)return res.status(503).json({error:"TMDB_NOT_CONFIGURED"});
- const q=String(req.query.q||"").trim(),mode=String(req.query.mode||"").trim(),mood=String(req.query.mood||"").trim(),person=String(req.query.person||"").trim();
+ const q=String(req.query.q||"").trim(),mode=String(req.query.mode||"").trim(),mood=String(req.query.mood||"").trim(),person=String(req.query.person||"").trim(),memory=String(req.query.memory||"").trim(),year=String(req.query.year||"").trim(),genre=String(req.query.genre||"").trim();
  try{
   let url,isPerson=false;
-  if(person){isPerson=true;url=new URL("https://api.themoviedb.org/3/search/person");url.searchParams.set("query",person);url.searchParams.set("language","ja-JP");url.searchParams.set("include_adult","false");
+  if(memory){
+   const genreMap={"アクション":"28","冒険":"12","アニメ":"16","コメディ":"35","犯罪":"80","ドキュメンタリー":"99","ドラマ":"18","ファミリー":"10751","ファンタジー":"14","歴史":"36","ホラー":"27","音楽":"10402","ミステリー":"9648","恋愛":"10749","SF":"878","サスペンス":"53","戦争":"10752","西部劇":"37"};
+   let keywordIds="";
+   if(memory){let ku=new URL("https://api.themoviedb.org/3/search/keyword");ku.searchParams.set("query",memory);ku.searchParams.set("page","1");let kr=await fetch(ku,{headers:{Authorization:"Bearer "+token,accept:"application/json"}});if(kr.ok){let kd=await kr.json();keywordIds=(kd.results||[]).slice(0,4).map(x=>x.id).join("|")}}
+   url=new URL("https://api.themoviedb.org/3/discover/movie");url.searchParams.set("language","ja-JP");url.searchParams.set("region","JP");url.searchParams.set("include_adult","false");url.searchParams.set("sort_by","popularity.desc");url.searchParams.set("vote_count.gte","5");if(keywordIds)url.searchParams.set("with_keywords",keywordIds);if(genreMap[genre])url.searchParams.set("with_genres",genreMap[genre]);if(year){if(/^\d{4}$/.test(year))url.searchParams.set("primary_release_year",year);else if(/^\d{4}s$/.test(year)){let y=parseInt(year);url.searchParams.set("primary_release_date.gte",y+"-01-01");url.searchParams.set("primary_release_date.lte",(y+9)+"-12-31")}}
+  }else if(person){isPerson=true;url=new URL("https://api.themoviedb.org/3/search/person");url.searchParams.set("query",person);url.searchParams.set("language","ja-JP");url.searchParams.set("include_adult","false");
   }else if(mood){
    const moods={cry:{genres:"18|10749",sort:"vote_average.desc",votes:"150"},easy:{genres:"35|10751|16",sort:"popularity.desc",votes:"80"},uplift:{genres:"35|12|10751",sort:"popularity.desc",votes:"100"},deep:{genres:"18|9648|36",sort:"vote_average.desc",votes:"200"},cozy:{genres:"18|35|10749",sort:"vote_average.desc",votes:"120"},group:{genres:"12|35|16|10751",sort:"popularity.desc",votes:"100"}};let m=moods[mood]||moods.cozy;url=new URL("https://api.themoviedb.org/3/discover/movie");url.searchParams.set("language","ja-JP");url.searchParams.set("region","JP");url.searchParams.set("include_adult","false");url.searchParams.set("with_genres",m.genres);url.searchParams.set("sort_by",m.sort);url.searchParams.set("vote_count.gte",m.votes);url.searchParams.set("vote_average.gte","6.2");url.searchParams.set("without_genres","27");
   }else if(mode){
