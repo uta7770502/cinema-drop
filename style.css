@@ -277,3 +277,10 @@ body:has(#detail:not(.hidden))>.detail-nav-fixed{display:grid!important}
 .archive-add{width:100%;margin:22px 0 4px;border:0;border-radius:999px;background:#171717;color:#fff;padding:15px 18px;font-size:12px;letter-spacing:.03em}
 .archive-add-panel{margin:12px 0 0}.archive-search{display:flex;gap:7px}.archive-search input{min-width:0;flex:1;border:1px solid #ded5c8;background:#fffaf4;border-radius:999px;padding:13px 15px;font-size:12px;outline:none}.archive-search button{border:0;background:#ef5b54;color:#fff;border-radius:999px;padding:0 18px;font-size:11px}
 #archiveSearchResults{display:flex;flex-direction:column;gap:6px;margin-top:10px}.archive-result{width:100%;border:1px solid #e3dbd0;background:#fffaf4;border-radius:14px;padding:7px;display:grid;grid-template-columns:42px 1fr 28px;align-items:center;gap:10px;text-align:left}.archive-result img,.archive-result>span{width:42px;height:60px;object-fit:cover;border-radius:6px;background:#e8e0d5}.archive-result i{font-style:normal;min-width:0}.archive-result b{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.archive-result small{display:block;color:#999;font-size:9px;margin-top:3px}.archive-result em{font-style:normal;font-size:20px;color:#ef5b54;text-align:center}.archive-searching{font-size:11px;color:#999;padding:10px 3px}
+
+.archive-source-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 14px}
+.archive-source-summary span{border:1px solid #ddd2c4;border-radius:18px;padding:16px;background:#f4efe7;display:flex;flex-direction:column;gap:5px}
+.archive-source-summary b{font:32px Georgia,serif;color:#171717}.archive-source-summary small{font-size:11px;color:#777;line-height:1.35}
+.archive-source-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 14px;margin-bottom:6px;scrollbar-width:none}
+.archive-source-tabs::-webkit-scrollbar{display:none}.archive-source-tabs button{white-space:nowrap;border:1px solid #ddd2c4;background:#fffaf3;border-radius:999px;padding:11px 15px;font-size:12px;color:#555}
+.archive-source-tabs button.selected{background:#171717;color:white;border-color:#171717}
