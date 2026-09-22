@@ -165,7 +165,7 @@
   set("infoLocation",countries.length?"舞台・撮影地域："+countries.join("／")+"\n印象的な場所をたどる。":"舞台・撮影地域は作品情報を確認中。");
   set("infoTrivia",(m.companies||[]).length?m.companies.slice(0,2).join("／")+"\nこの作品の制作会社。":"制作会社情報を確認中。");
   let terms={book:"原作 関連書籍",next:"似た映画 おすすめ",music:"サウンドトラック 主題歌",goods:"公式グッズ 映画グッズ",cast:"出演俳優 キャスト",director:"監督 作品歴",location:"ロケ地 撮影場所 舞台",company:"制作会社 production company"};
-  document.querySelectorAll("#detail .info-goods article[data-info]").forEach(card=>{let go=()=>{let q=m.title+" "+(terms[card.dataset.info]||"");window.open("https://www.google.com/search?q="+encodeURIComponent(q),"_blank","noopener")};card.onclick=go;card.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
+  document.querySelectorAll("#detail .info-goods article[data-info]").forEach(card=>{let go=()=>{let y=String(m.date||"").slice(0,4),q="映画「"+m.title+"」 "+(y?y+" ":"")+(terms[card.dataset.info]||"");window.open("https://www.google.com/search?q="+encodeURIComponent(q),"_blank","noopener")};card.onclick=go;card.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
  }
  function openAfterDrop(kind){
   let m=currentMovie||recItems[0];if(!m)return;
