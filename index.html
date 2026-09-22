@@ -263,7 +263,7 @@ function renderArchive(initialSource="cinemadrop",openAdd=false){
  $("watchedBtn")?.addEventListener("click",()=>{$("reactionChoices")?.classList.toggle("hidden")},true);
  document.querySelectorAll("#reactionChoices button").forEach(b=>b.addEventListener("click",()=>{let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}"),title=$("detailTitle").textContent;hist[title]={reaction:b.dataset.reaction,source:"cinemadrop",date:new Date().toISOString(),movie:currentMovie?{id:currentMovie.id,type:currentMovie.type||"movie",title:currentMovie.title||title,date:currentMovie.date||"",poster:currentMovie.poster||"",backdrop:currentMovie.backdrop||"",rating:currentMovie.rating||0}:null};localStorage.setItem("cinemaDropHistory",JSON.stringify(hist));setTimeout(recommendForProfile,50);document.querySelectorAll("#reactionChoices button").forEach(x=>x.classList.toggle("selected",x===b));$("reactionSaved")?.classList.remove("hidden")},true));
  document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));renderDetailWatch(b.dataset.watch)},true));
- $("dropNav")?.addEventListener("click",()=>{fallbackPage("home");setTimeout(()=>document.querySelector(".today")?.scrollIntoView({behavior:"smooth"}),30)},true);
+ $("dropNav")?.addEventListener("click",()=>{fallbackPage("home");window.cinemaDropRefresh?.()},true);
  $("heroRecommend")?.addEventListener("click",()=>{if(recItems.length){recIndex=0;currentMovie=recItems[0];openCurrentDetail()}else recommendForProfile()});
  document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",async(e)=>{e.preventDefault();e.stopPropagation();window.cinemaDropMoodHero?.(b.dataset.mood);document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));let y=window.scrollY;try{let r=await fetch("/api/search?mood="+encodeURIComponent(b.dataset.mood)),d=await r.json(),items=withoutWatched(d.results||[]).filter(x=>x.type==="movie"&&x.poster).slice(0,10),row=document.getElementById("pickupRow");recItems=items;recIndex=0;if(items.length&&row){currentMovie=items[0];row.innerHTML=items.map(x=>`<button class="era-card mood-result" data-id="${x.id}"><span style="background-image:url(${x.poster})"></span><b>${x.title}</b><small>${String(x.date||"").slice(0,4)}　★${Number(x.rating||0).toFixed(1)}</small></button>`).join("");row.querySelectorAll(".mood-result").forEach((el,i)=>el.onclick=()=>{currentMovie=items[i];recIndex=i;openCurrentDetail()})}}catch(err){}requestAnimationFrame(()=>window.scrollTo(0,y))},true));
  $("comingCard")?.addEventListener("click",openCurrentDetail); $("allRecommend")?.addEventListener("click",()=>document.querySelector(".poster-strip")?.scrollIntoView({behavior:"smooth"}));
@@ -307,7 +307,17 @@ document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("clic
   if(!theater.length)theater=streaming.slice(0,4);if(!streaming.length)streaming=theater.slice(0,4);mount("theater",theater);mount("stream",streaming)
  }
  let after=document.querySelector('.afterdrop-home'),sub=document.getElementById('subpage'),nav=document.querySelector('main nav');if(after&&sub&&nav)nav.parentNode.insertBefore(after,nav);
- window.cinemaDropMoodHero=load;load()
+ let dropSeed=0;
+ async function refreshDrop(){
+  dropSeed++;
+  let [ta,sa]=await Promise.all([query("","now_playing"),query("","streaming")]);
+  const rotate=a=>{a=unique(a).filter(x=>(x.poster||x.backdrop)&&!window.isWatchedMovie?.(x));if(!a.length)return a;let n=dropSeed%a.length;return a.slice(n).concat(a.slice(0,n)).slice(0,4)};
+  let theater=rotate(ta),streaming=rotate(sa);
+  if(!theater.length)theater=streaming.slice(0,4);if(!streaming.length)streaming=theater.slice(0,4);
+  mount("theater",theater);mount("stream",streaming);
+  window.scrollTo({top:0,behavior:"smooth"});
+ }
+ window.cinemaDropMoodHero=load;window.cinemaDropRefresh=refreshDrop;load()
 })();
 </script><nav class="detail-nav detail-nav-fixed">
 <button class="active" data-page="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H5V11"/><path d="M9 21v-6h6v6"/></svg><span>ホーム</span></button>
