@@ -17,12 +17,12 @@ export default async function handler(req,res){
   }else if(person){isPerson=true;url=new URL("https://api.themoviedb.org/3/search/person");url.searchParams.set("query",person);url.searchParams.set("language","ja-JP");url.searchParams.set("include_adult","false");
   }else if(mood){
    const moods={
-    cry:{genres:"18|10749",sort:"vote_average.desc",votes:"250",rating:"6.8",without:"27|35|10751",runtime:"165"},
-    easy:{genres:"35|10751|16",sort:"popularity.desc",votes:"150",rating:"6.3",without:"27|53|80|10752",runtime:"125"},
-    uplift:{genres:"35|12|10751|10402",sort:"popularity.desc",votes:"180",rating:"6.5",without:"27|53",runtime:"145"},
-    deep:{genres:"18|9648|36|878",sort:"vote_average.desc",votes:"350",rating:"7.0",without:"27|10751",runtime:"210"},
-    cozy:{genres:"35|10749|16|10751",sort:"vote_average.desc",votes:"180",rating:"6.6",without:"27|53|80|10752",runtime:"135"},
-    group:{genres:"12|35|16|10751",sort:"popularity.desc",votes:"250",rating:"6.5",without:"27|53|80",runtime:"150"}
+    cry:{genres:"18|10749",sort:"vote_average.desc",votes:"100",rating:"6.4",without:"27|35",runtime:"180"},
+    easy:{genres:"35|10751|16",sort:"popularity.desc",votes:"60",rating:"6.0",without:"27|53|10752",runtime:"135"},
+    uplift:{genres:"35|12|10751|10402",sort:"popularity.desc",votes:"80",rating:"6.2",without:"27|53",runtime:"155"},
+    deep:{genres:"18|9648|36|878",sort:"vote_average.desc",votes:"150",rating:"6.7",without:"27",runtime:"220"},
+    cozy:{genres:"35|10749|16|10751",sort:"vote_average.desc",votes:"70",rating:"6.2",without:"27|53|10752",runtime:"150"},
+    group:{genres:"12|35|16|10751",sort:"popularity.desc",votes:"100",rating:"6.2",without:"27|53",runtime:"165"}
    };let m=moods[mood]||moods.cozy;url=new URL("https://api.themoviedb.org/3/discover/movie");url.searchParams.set("language","ja-JP");url.searchParams.set("region","JP");url.searchParams.set("include_adult","false");url.searchParams.set("with_genres",m.genres);url.searchParams.set("sort_by",m.sort);url.searchParams.set("vote_count.gte",m.votes);url.searchParams.set("vote_average.gte",m.rating);url.searchParams.set("without_genres",m.without);url.searchParams.set("with_runtime.lte",m.runtime);url.searchParams.set("primary_release_date.lte",new Date().toISOString().slice(0,10));
   }else if(mode){
    url=new URL(mode==="now_playing"?"https://api.themoviedb.org/3/movie/now_playing":"https://api.themoviedb.org/3/discover/movie");
