@@ -158,7 +158,6 @@
   goods.dataset.afterBound="1";
   const activate=e=>{let b=e.target.closest("[data-detail-after]");if(!b||!goods.contains(b))return;e.preventDefault();e.stopPropagation();openAfterDrop(b.getAttribute("data-detail-after"))};
   goods.addEventListener("click",activate,false);
-  goods.addEventListener("touchend",e=>{let b=e.target.closest("[data-detail-after]");if(!b||!goods.contains(b))return;e.preventDefault();e.stopPropagation();openAfterDrop(b.getAttribute("data-detail-after"))},{passive:false});
  }
 
  function openAfterDrop(kind){
