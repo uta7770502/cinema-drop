@@ -264,7 +264,7 @@ function renderArchive(initialSource="cinemadrop",openAdd=false){
  $("watchedBtn")?.addEventListener("click",()=>{$("reactionChoices")?.classList.toggle("hidden")},true);
  document.querySelectorAll("#reactionChoices button").forEach(b=>b.addEventListener("click",()=>{let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}"),title=$("detailTitle").textContent;hist[title]={reaction:b.dataset.reaction,source:"cinemadrop",date:new Date().toISOString(),movie:currentMovie?{id:currentMovie.id,type:currentMovie.type||"movie",title:currentMovie.title||title,date:currentMovie.date||"",poster:currentMovie.poster||"",backdrop:currentMovie.backdrop||"",rating:currentMovie.rating||0}:null};localStorage.setItem("cinemaDropHistory",JSON.stringify(hist));setTimeout(recommendForProfile,50);document.querySelectorAll("#reactionChoices button").forEach(x=>x.classList.toggle("selected",x===b));$("reactionSaved")?.classList.remove("hidden")},true));
  document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));renderDetailWatch(b.dataset.watch)},true));
- document.querySelectorAll("[data-drop-nav]").forEach(b=>b.addEventListener("click",async e=>{e.preventDefault();e.stopImmediatePropagation();$("detail")?.classList.add("hidden");$("home")?.classList.remove("hidden");document.querySelector(".detail-nav-fixed")?.classList.remove("show");homeSections(true);$("subpage")?.classList.add("hidden");window.cinemaDropMoodActive="drop";await window.cinemaDropRefreshTen?.({});window.cinemaDropRefresh?.()},true));
+ document.querySelectorAll("[data-drop-nav]").forEach(b=>b.addEventListener("click",async e=>{e.preventDefault();e.stopImmediatePropagation();$("detail")?.classList.add("hidden");$("home")?.classList.remove("hidden");document.querySelector(".detail-nav-fixed")?.classList.remove("show");homeSections(true);$("subpage")?.classList.add("hidden");window.cinemaDropMoodActive="drop";window.cinemaDropSkipTenOnce=true;await window.cinemaDropRefreshTen?.({});await window.cinemaDropRefresh?.()},true));
  $("heroRecommend")?.addEventListener("click",()=>{if(recItems.length){recIndex=0;currentMovie=recItems[0];openCurrentDetail()}else recommendForProfile()});
  async function refreshRecommendationTen(opts={}){
   const mood=opts.mood||"",oldIds=new Set((recItems||[]).map(x=>String(x.id))),get=async u=>{try{let r=await fetch(u+(u.includes("?")?"&":"?")+"t="+Date.now());if(!r.ok)return[];let d=await r.json();return d.results||[]}catch(e){return[]}};
@@ -273,18 +273,18 @@ function renderArchive(initialSource="cinemadrop",openAdd=false){
   let fresh=all.filter(x=>!oldIds.has(String(x.id))),rest=all.filter(x=>oldIds.has(String(x.id)));
   fresh.sort(()=>Math.random()-.5);rest.sort(()=>Math.random()-.5);
   let items=fresh.concat(rest).slice(0,10);if(!items.length)return false;
-  recItems=items;recIndex=0;currentMovie=items[0];renderRec();return true
+  recItems=items;recIndex=0;currentMovie=items[0];window.cinemaDropTenLocked=true;renderRec();return true
 } window.cinemaDropRefreshTen=refreshRecommendationTen;
  document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",async(e)=>{e.preventDefault();e.stopPropagation();window.cinemaDropMoodActive=b.dataset.mood;document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));window.cinemaDropMoodHero?.(b.dataset.mood);window.cinemaDropMoodClicks=(window.cinemaDropMoodClicks||0)+1;await window.cinemaDropRefreshTen?.({mood:b.dataset.mood,seed:Date.now()+window.cinemaDropMoodClicks})},true));
  $("comingCard")?.addEventListener("click",openCurrentDetail); $("allRecommend")?.addEventListener("click",()=>document.querySelector(".poster-strip")?.scrollIntoView({behavior:"smooth"}));
- $("moodReset")?.addEventListener("click",()=>{window.cinemaDropMoodActive="";document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));recommendForProfile();window.cinemaDropMoodHero?.()});
+ $("moodReset")?.addEventListener("click",()=>{window.cinemaDropMoodActive="";window.cinemaDropTenLocked=false;document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));recommendForProfile();window.cinemaDropMoodHero?.()});
 
 })();</script><script>
 (function(){
 let era="latest",newest=true;
 const yr=x=>{let m=String(x&&x.date||"").match(/[12][0-9][0-9][0-9]/);return Number(m?m[0]:0)};
 const pass=y=>era==="pre1990"?y&&y<1990:era==="1990"?y>=1990&&y<2000:era==="2000"?y>=2000&&y<2010:era==="2010"?y>=2010&&y<2020:era==="2020"?y>=2020&&y<2030:y>=2024;
-async function go(){if(window.cinemaDropMoodActive)return;let all=[];if(era==="latest"){try{let r=await fetch("/api/search?mode=latest"),d=await r.json();all=d.results||[]}catch(e){}}else{for(let q of ["映画"]){try{let r=await fetch("/api/search?q="+encodeURIComponent(q)),d=await r.json();all=all.concat(d.results||[])}catch(e){}}}
+async function go(){if(window.cinemaDropMoodActive||window.cinemaDropTenLocked)return;let all=[];if(era==="latest"){try{let r=await fetch("/api/search?mode=latest"),d=await r.json();all=d.results||[]}catch(e){}}else{for(let q of ["映画"]){try{let r=await fetch("/api/search?q="+encodeURIComponent(q)),d=await r.json();all=all.concat(d.results||[])}catch(e){}}}
 let seen=new Set(),a=all.filter(x=>x.type==="movie"&&pass(yr(x))&&!seen.has(x.id)&&(seen.add(x.id)||true));if(newest)a.sort((x,y)=>yr(y)-yr(x));
 let row=document.getElementById("pickupRow"),shown=a.slice(0,10);if(row){row.innerHTML=shown.map(x=>'<button class="era-card"><span style="background-image:url('+x.poster+')"></span><b>'+x.title+'</b><small>'+yr(x)+'</small></button>').join("");row.querySelectorAll(".era-card").forEach((b,i)=>b.onclick=()=>window.cinemaDropOpenDetail?.(shown[i]))}
 let x=a[0],t=document.getElementById("comingTitle"),v=document.querySelector(".theater-visual");if(x&&t)t.textContent=x.title;if(x&&v&&x.poster)v.style.backgroundImage='url("'+x.poster+'")'}
@@ -325,7 +325,7 @@ document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("clic
   let theater=rotate(ta),streaming=rotate(sa);
   if(!theater.length)theater=streaming.slice(0,4);if(!streaming.length)streaming=theater.slice(0,4);
   mount("theater",theater);mount("stream",streaming);
-  window.cinemaDropMoodActive="";await window.cinemaDropRefreshTen?.({seed:dropSeed});
+  if(window.cinemaDropSkipTenOnce){window.cinemaDropSkipTenOnce=false}else{await window.cinemaDropRefreshTen?.({seed:dropSeed})}
   window.scrollTo({top:0,behavior:"smooth"});
  }
  window.cinemaDropMoodHero=load;window.cinemaDropRefresh=refreshDrop;load()
