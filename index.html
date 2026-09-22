@@ -47,7 +47,7 @@
 <button data-detail-after="goods"><i>GOODS</i><span><b>映画グッズ</b><small>お気に入りを手元に</small></span><em>→</em></button>
 <button data-detail-after="cast"><i>CAST</i><span><b>出演俳優</b><small>キャストから作品を広げる</small></span><em>→</em></button>
 <button data-detail-after="director"><i>DIRECTOR</i><span><b>監督・作品歴</b><small>作家性をたどる</small></span><em>→</em></button>
-<a id="locationAfterLink" class="after-location-link" href="#location"><i>LOCATION</i><span><b>ロケ地・舞台</b><small>映画の場所をたどる</small></span><em>→</em></a>
+<button id="locationAfterBtn" data-detail-after="location" type="button"><i>LOCATION</i><span><b>ロケ地・舞台</b><small>映画の場所をたどる</small></span><em>→</em></button>
 <button data-detail-after="trivia"><i>TRIVIA</i><span><b>制作背景・トリビア</b><small>知るともう一度観たくなる</small></span><em>→</em></button>
 </div></section></section></div></div></section><script>
 (function(){
@@ -122,7 +122,7 @@
   $("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);
   if(currentMovie.backdrop)$("detailHero").style.background='linear-gradient(0deg,rgba(0,0,0,.72),transparent 65%),url("'+currentMovie.backdrop+'") center/cover no-repeat';
   $("detail").classList.remove("hidden");$("home").classList.add("hidden");document.querySelector(".detail-nav-fixed")?.classList.add("show");window.scrollTo(0,0);
-  renderAfterDrop();bindLocationLink();
+  renderAfterDrop();
   let panel=$("watchPanel");if(panel)panel.innerHTML='<div class="provider-row"><span><b>視聴情報を確認中…</b></span></div>';
   try{
    let r=await fetch("/api/title?type="+(currentMovie.type||"movie")+"&id="+currentMovie.id),d=await r.json(),x=d.detail||{};
@@ -153,6 +153,7 @@
   if(!currentMovie)return;
   let goods=document.querySelector("#detail .after .goods");if(!goods)return;
   goods.querySelectorAll("[data-detail-after]").forEach(b=>{b.style.pointerEvents="auto";b.style.cursor="pointer"});
+  let lb=document.getElementById("locationAfterBtn");if(lb){lb.onclick=e=>{e.preventDefault();e.stopPropagation();openAfterDrop("location")}}
   if(goods.dataset.afterBound==="1")return;
   goods.dataset.afterBound="1";
   const activate=e=>{let b=e.target.closest("[data-detail-after]");if(!b||!goods.contains(b))return;e.preventDefault();e.stopPropagation();openAfterDrop(b.getAttribute("data-detail-after"))};
@@ -160,10 +161,6 @@
   goods.addEventListener("touchend",e=>{let b=e.target.closest("[data-detail-after]");if(!b||!goods.contains(b))return;e.preventDefault();e.stopPropagation();openAfterDrop(b.getAttribute("data-detail-after"))},{passive:false});
  }
 
- function bindLocationLink(){
-  let a=document.getElementById("locationAfterLink");if(!a)return;
-  a.onclick=e=>{e.preventDefault();openAfterDrop("location")};
- }
  function openAfterDrop(kind){
   let m=currentMovie||recItems[0];if(!m)return;
   let sub=$("subpage"),t=m.title||"この作品",q=encodeURIComponent(t),credits=m.credits||{},recs=m.recommendations||[];
