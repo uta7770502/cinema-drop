@@ -118,6 +118,7 @@
   $("detailTitle").textContent=currentMovie.title;$("detailMeta").textContent=((currentMovie.date||"").slice(0,4))+" · Movie";$("detailReason").textContent=personalizedReason(currentMovie);
   if(currentMovie.backdrop)$("detailHero").style.background='linear-gradient(0deg,rgba(0,0,0,.72),transparent 65%),url("'+currentMovie.backdrop+'") center/cover no-repeat';
   $("detail").classList.remove("hidden");$("home").classList.add("hidden");document.querySelector(".detail-nav-fixed")?.classList.add("show");window.scrollTo(0,0);
+  renderAfterDrop();
   let panel=$("watchPanel");if(panel)panel.innerHTML='<div class="provider-row"><span><b>視聴情報を確認中…</b></span></div>';
   try{
    let r=await fetch("/api/title?type="+(currentMovie.type||"movie")+"&id="+currentMovie.id),d=await r.json(),x=d.detail||{};
@@ -138,7 +139,10 @@
  }
  function renderAfterDrop(){
   if(!currentMovie)return;
-  document.querySelectorAll("#detail [data-detail-after]").forEach(b=>b.onclick=()=>openAfterDrop(b.dataset.detailAfter));
+  document.querySelectorAll("[data-detail-after]").forEach(b=>{
+   b.onclick=null;
+   b.onclick=e=>{e.preventDefault();e.stopPropagation();openAfterDrop(b.dataset.detailAfter)}
+  });
  }
 
  function openAfterDrop(kind){
