@@ -41,14 +41,14 @@
 <button data-page="list"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6a5.5 5.5 0 0 0 1-8.8z"/></svg><span>マイリスト</span></button>
 <button data-page="mypage"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 22c.5-5 3.2-8 8-8s7.5 3 8 8"/></svg><span>マイページ</span></button>
 </nav><div class="tmdb-credit">Movie & TV data/images: TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</div></main><section id="detail" class="detail hidden"><div class="detail-inner"><div class="detail-hero" id="detailHero"><button id="closeDetail">←</button><div><small>TODAY’S DROP</small><h2 id="detailTitle">PERFECT DAYS</h2><p id="detailMeta">2023 · 124min · Drama</p></div></div><div class="detail-body"><div class="detail-match"><b id="detailMatch">96%</b><span>AI MATCH<br><small>あなたとの相性</small></span></div><p id="detailReason">静かな日常や、余韻の残る人物ドラマを好むあなたへ。</p><section id="beforeWatch" class="before-watch"><small>BEFORE YOU WATCH</small><h3>観る前に、これだけ。</h3><div id="beforeWatchItems" class="before-watch-items"></div></section><section id="detailWatchedBox" class="watched-box"><small>YOUR REACTION</small><h3>この映画、観た？</h3><p>感想を残すほど、次のDROPがあなたらしくなります。</p><button id="watchedBtn" class="watched-btn">観た ✓</button><div id="reactionChoices" class="reaction-choices hidden"><button data-reaction="love">大好き</button><button data-reaction="good">よかった</button><button data-reaction="okay">ふつう</button><button data-reaction="bad">合わなかった</button></div><p id="reactionSaved" class="reaction-saved hidden">好みに反映しました ✦</p></section><section class="where"><small id="whereEyebrow">WHERE TO WATCH</small><h3 id="whereTitle">どこで観る？</h3><div class="watch-tabs"><button class="selected" data-watch="stream">配信</button><button data-watch="rent">レンタル</button><button data-watch="theater">映画館</button></div><div id="watchPanel" class="watch-panel"></div><p class="watch-credit">配信情報はTMDb / JustWatch提供情報を参照しています。最新状況は各サービスでご確認ください。</p></section><section class="after"><small>AFTER DROP</small><h3>観たあとも、映画を楽しむ。</h3><p>この作品から、もう少し世界を広げる。</p><div class="goods info-goods">
-<article data-info="book"><i>BOOK</i><span><b>原作・関連書籍</b><small id="infoBook">作品に関連する書籍情報を確認中。</small></span></article>
-<article data-info="next"><i>NEXT</i><span><b>次に観たい映画</b><small id="infoNext">関連作品を確認中。</small></span></article>
-<article data-info="music"><i>MUSIC</i><span><b>サウンドトラック</b><small id="infoMusic">音楽情報を確認中。</small></span></article>
-<article data-info="goods"><i>GOODS</i><span><b>映画グッズ</b><small id="infoGoods">関連アイテム情報を確認中。</small></span></article>
-<article data-info="cast"><i>CAST</i><span><b>出演俳優</b><small id="infoCast">主要キャストを確認中。</small></span></article>
-<article data-info="director"><i>DIRECTOR</i><span><b>監督・作品歴</b><small id="infoDirector">監督情報を確認中。</small></span></article>
-<article data-info="location"><i>LOCATION</i><span><b>ロケ地・舞台</b><small id="infoLocation">舞台・撮影地域を確認中。</small></span></article>
-<article data-info="trivia"><i>TRIVIA</i><span><b>制作背景・トリビア</b><small id="infoTrivia">制作情報を確認中。</small></span></article>
+<article data-info="book" role="link" tabindex="0"><i>BOOK</i><span><b>原作・関連書籍</b><small id="infoBook">作品に関連する書籍情報を確認中。</small></span></article>
+<article data-info="next" role="link" tabindex="0"><i>NEXT</i><span><b>次に観たい映画</b><small id="infoNext">関連作品を確認中。</small></span></article>
+<article data-info="music" role="link" tabindex="0"><i>MUSIC</i><span><b>サウンドトラック</b><small id="infoMusic">音楽情報を確認中。</small></span></article>
+<article data-info="goods" role="link" tabindex="0"><i>GOODS</i><span><b>映画グッズ</b><small id="infoGoods">関連アイテム情報を確認中。</small></span></article>
+<article data-info="cast" role="link" tabindex="0"><i>CAST</i><span><b>出演俳優</b><small id="infoCast">主要キャストを確認中。</small></span></article>
+<article data-info="director" role="link" tabindex="0"><i>DIRECTOR</i><span><b>監督・作品歴</b><small id="infoDirector">監督情報を確認中。</small></span></article>
+<article data-info="location" role="link" tabindex="0"><i>LOCATION</i><span><b>ロケ地・舞台</b><small id="infoLocation">舞台・撮影地域を確認中。</small></span></article>
+<article data-info="company" role="link" tabindex="0"><i>COMPANY</i><span><b>制作会社</b><small id="infoTrivia">制作情報を確認中。</small></span></article>
 </div></section></section></div></div></section><script>
 (function(){
  const $=id=>document.getElementById(id);
@@ -163,7 +163,9 @@
   set("infoCast",cast.length?cast.join("／")+"\n主要キャスト":"主要キャスト情報を確認中。");
   set("infoDirector",directors.length?directors.join("／")+"\n監督の関連作品も。":"監督・作品歴を確認中。");
   set("infoLocation",countries.length?"舞台・撮影地域："+countries.join("／")+"\n印象的な場所をたどる。":"舞台・撮影地域は作品情報を確認中。");
-  set("infoTrivia",(m.companies||[]).length?"制作："+m.companies.slice(0,2).join("／")+"\n制作背景をひとこと紹介。":"制作背景・トリビアを確認中。");
+  set("infoTrivia",(m.companies||[]).length?m.companies.slice(0,2).join("／")+"\nこの作品の制作会社。":"制作会社情報を確認中。");
+  let terms={book:"原作 関連書籍",next:"似た映画 おすすめ",music:"サウンドトラック 主題歌",goods:"公式グッズ 映画グッズ",cast:"出演俳優 キャスト",director:"監督 作品歴",location:"ロケ地 撮影場所 舞台",company:"制作会社 production company"};
+  document.querySelectorAll("#detail .info-goods article[data-info]").forEach(card=>{let go=()=>{let q=m.title+" "+(terms[card.dataset.info]||"");window.open("https://www.google.com/search?q="+encodeURIComponent(q),"_blank","noopener")};card.onclick=go;card.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
  }
  function openAfterDrop(kind){
   let m=currentMovie||recItems[0];if(!m)return;
