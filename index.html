@@ -47,7 +47,7 @@
 <button data-detail-after="goods"><i>GOODS</i><span><b>映画グッズ</b><small>お気に入りを手元に</small></span><em>→</em></button>
 <button data-detail-after="cast"><i>CAST</i><span><b>出演俳優</b><small>キャストから作品を広げる</small></span><em>→</em></button>
 <button data-detail-after="director"><i>DIRECTOR</i><span><b>監督・作品歴</b><small>作家性をたどる</small></span><em>→</em></button>
-<button data-detail-after="location"><i>LOCATION</i><span><b>ロケ地・舞台</b><small>映画の場所をたどる</small></span><em>→</em></button>
+<button id="locationAfterBtn" data-detail-after="location" type="button"><i>LOCATION</i><span><b>ロケ地・舞台</b><small>映画の場所をたどる</small></span><em>→</em></button>
 <button data-detail-after="trivia"><i>TRIVIA</i><span><b>制作背景・トリビア</b><small>知るともう一度観たくなる</small></span><em>→</em></button>
 </div></section></section></div></div></section><script>
 (function(){
@@ -153,6 +153,8 @@
   if(!currentMovie)return;
   let goods=document.querySelector("#detail .after .goods");if(!goods)return;
   goods.querySelectorAll("[data-detail-after]").forEach(b=>{b.style.pointerEvents="auto";b.style.cursor="pointer"});
+  let locationBtn=document.getElementById("locationAfterBtn");
+  if(locationBtn&&!locationBtn.dataset.locationBound){locationBtn.dataset.locationBound="1";locationBtn.addEventListener("click",e=>{e.preventDefault();e.stopImmediatePropagation();openAfterDrop("location")},true);locationBtn.addEventListener("touchend",e=>{e.preventDefault();e.stopImmediatePropagation();openAfterDrop("location")},{capture:true,passive:false})}
   if(goods.dataset.afterBound==="1")return;
   goods.dataset.afterBound="1";
   const activate=e=>{let b=e.target.closest("[data-detail-after]");if(!b||!goods.contains(b))return;e.preventDefault();e.stopPropagation();openAfterDrop(b.getAttribute("data-detail-after"))};
