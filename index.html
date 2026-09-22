@@ -147,10 +147,13 @@
  }
  function renderAfterDrop(){
   if(!currentMovie)return;
-  document.querySelectorAll("[data-detail-after]").forEach(b=>{
-   b.onclick=null;
-   b.onclick=e=>{e.preventDefault();e.stopPropagation();openAfterDrop(b.dataset.detailAfter)}
-  });
+  let goods=document.querySelector("#detail .after .goods");if(!goods)return;
+  goods.querySelectorAll("[data-detail-after]").forEach(b=>{b.style.pointerEvents="auto";b.style.cursor="pointer"});
+  if(goods.dataset.afterBound==="1")return;
+  goods.dataset.afterBound="1";
+  const activate=e=>{let b=e.target.closest("[data-detail-after]");if(!b||!goods.contains(b))return;e.preventDefault();e.stopPropagation();openAfterDrop(b.getAttribute("data-detail-after"))};
+  goods.addEventListener("click",activate,false);
+  goods.addEventListener("touchend",e=>{let b=e.target.closest("[data-detail-after]");if(!b||!goods.contains(b))return;e.preventDefault();e.stopPropagation();openAfterDrop(b.getAttribute("data-detail-after"))},{passive:false});
  }
 
  function openAfterDrop(kind){
