@@ -264,16 +264,15 @@ function renderArchive(initialSource="cinemadrop",openAdd=false){
  $("watchedBtn")?.addEventListener("click",()=>{$("reactionChoices")?.classList.toggle("hidden")},true);
  document.querySelectorAll("#reactionChoices button").forEach(b=>b.addEventListener("click",()=>{let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}"),title=$("detailTitle").textContent;hist[title]={reaction:b.dataset.reaction,source:"cinemadrop",date:new Date().toISOString(),movie:currentMovie?{id:currentMovie.id,type:currentMovie.type||"movie",title:currentMovie.title||title,date:currentMovie.date||"",poster:currentMovie.poster||"",backdrop:currentMovie.backdrop||"",rating:currentMovie.rating||0}:null};localStorage.setItem("cinemaDropHistory",JSON.stringify(hist));setTimeout(recommendForProfile,50);document.querySelectorAll("#reactionChoices button").forEach(x=>x.classList.toggle("selected",x===b));$("reactionSaved")?.classList.remove("hidden")},true));
  document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));renderDetailWatch(b.dataset.watch)},true));
- document.querySelectorAll("[data-drop-nav]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();e.stopImmediatePropagation();$("detail")?.classList.add("hidden");$("home")?.classList.remove("hidden");document.querySelector(".detail-nav-fixed")?.classList.remove("show");homeSections(true);$("subpage")?.classList.add("hidden");window.cinemaDropRefresh?.()},true));
+ document.querySelectorAll("[data-drop-nav]").forEach(b=>b.addEventListener("click",async e=>{e.preventDefault();e.stopImmediatePropagation();$("detail")?.classList.add("hidden");$("home")?.classList.remove("hidden");document.querySelector(".detail-nav-fixed")?.classList.remove("show");homeSections(true);$("subpage")?.classList.add("hidden");window.cinemaDropMoodActive="drop";await window.cinemaDropRefreshTen?.({});window.cinemaDropRefresh?.()},true));
  $("heroRecommend")?.addEventListener("click",()=>{if(recItems.length){recIndex=0;currentMovie=recItems[0];openCurrentDetail()}else recommendForProfile()});
  async function refreshRecommendationTen(opts={}){
-  let mood=opts.mood||"",seed=opts.seed||Date.now(),raw=[];
-  const get=async u=>{try{let r=await fetch(u+(u.includes("?")?"&":"?")+"t="+Date.now());if(!r.ok)return[];let d=await r.json();return d.results||[]}catch(e){return[]}};
-  raw=mood?await get("/api/search?mood="+encodeURIComponent(mood)):await get("/api/search?mode=latest");
-  if(raw.length<18)raw=raw.concat(await get("/api/search?mode=streaming"));
-  let seen=new Set(),items=withoutWatched(raw).filter(x=>x.type==="movie"&&x.poster&&!seen.has(x.id)&&(seen.add(x.id)||true));
-  for(let i=items.length-1;i>0;i--){let j=Math.abs((seed*9301+i*49297)%233280)%(i+1);[items[i],items[j]]=[items[j],items[i]]}
-  items=items.slice(0,10);if(!items.length)return false;
+  const mood=opts.mood||"",oldIds=new Set((recItems||[]).map(x=>String(x.id))),get=async u=>{try{let r=await fetch(u+(u.includes("?")?"&":"?")+"t="+Date.now());if(!r.ok)return[];let d=await r.json();return d.results||[]}catch(e){return[]}};
+  let pools=await Promise.all(mood?[get("/api/search?mood="+encodeURIComponent(mood)),get("/api/search?mode=latest"),get("/api/search?mode=streaming")]:[get("/api/search?mode=latest"),get("/api/search?mode=streaming"),get("/api/search?q="+encodeURIComponent(["映画","ドラマ","アクション","コメディ"][(window.cinemaDropCycle=(window.cinemaDropCycle||0)+1)%4]))]);
+  let seen=new Set(),all=withoutWatched(pools.flat()).filter(x=>x.type==="movie"&&x.poster&&!seen.has(String(x.id))&&(seen.add(String(x.id))||true));
+  let fresh=all.filter(x=>!oldIds.has(String(x.id))),rest=all.filter(x=>oldIds.has(String(x.id)));
+  fresh.sort(()=>Math.random()-.5);rest.sort(()=>Math.random()-.5);
+  let items=fresh.concat(rest).slice(0,10);if(!items.length)return false;
   recItems=items;recIndex=0;currentMovie=items[0];renderRec();return true
 } window.cinemaDropRefreshTen=refreshRecommendationTen;
  document.querySelectorAll(".mood-grid button").forEach(b=>b.addEventListener("click",async(e)=>{e.preventDefault();e.stopPropagation();window.cinemaDropMoodActive=b.dataset.mood;document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x===b));window.cinemaDropMoodHero?.(b.dataset.mood);window.cinemaDropMoodClicks=(window.cinemaDropMoodClicks||0)+1;await window.cinemaDropRefreshTen?.({mood:b.dataset.mood,seed:Date.now()+window.cinemaDropMoodClicks})},true));
