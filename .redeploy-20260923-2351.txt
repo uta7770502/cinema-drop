@@ -1,0 +1,1 @@
+Trigger a fresh Vercel deployment from the current main branch after verifying that main/index.html contains the full CINEMA DROP application.
