@@ -37,7 +37,7 @@
 <nav>
 <button class="active" data-page="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H5V11"/><path d="M9 21v-6h6v6"/></svg><span>ホーム</span></button>
 <button data-page="search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><span>さがす</span></button>
-<button type="button" class="dropnav" data-drop-nav="1" onclick="window.cinemaDropForceRecommend('');window.cinemaDropRefresh();return false;"><i></i><span>DROP</span></button>
+<button type="button" class="dropnav" data-drop-nav="1" onclick="window.cinemaDropSkipTenOnce=true;window.cinemaDropForceRecommend('');window.cinemaDropRefresh();return false;"><i></i><span>DROP</span></button>
 <button data-page="list"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6a5.5 5.5 0 0 0 1-8.8z"/></svg><span>マイリスト</span></button>
 <button data-page="mypage"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 22c.5-5 3.2-8 8-8s7.5 3 8 8"/></svg><span>マイページ</span></button>
 </nav><div class="tmdb-credit">Movie & TV data/images: TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</div></main><section id="detail" class="detail hidden"><div class="detail-inner"><div class="detail-hero" id="detailHero"><button id="closeDetail">←</button><div><small>TODAY’S DROP</small><h2 id="detailTitle">PERFECT DAYS</h2><p id="detailMeta">2023 · 124min · Drama</p></div></div><div class="detail-body"><div class="detail-match"><b id="detailMatch">96%</b><span>AI MATCH<br><small>あなたとの相性</small></span></div><p id="detailReason">静かな日常や、余韻の残る人物ドラマを好むあなたへ。</p><section id="beforeWatch" class="before-watch"><small>BEFORE YOU WATCH</small><h3>観る前に、これだけ。</h3><div id="beforeWatchItems" class="before-watch-items"></div></section><section id="detailWatchedBox" class="watched-box"><small>YOUR REACTION</small><h3>この映画、観た？</h3><p>感想を残すほど、次のDROPがあなたらしくなります。</p><button id="watchedBtn" class="watched-btn">観た ✓</button><div id="reactionChoices" class="reaction-choices hidden"><button data-reaction="love">大好き</button><button data-reaction="good">よかった</button><button data-reaction="okay">ふつう</button><button data-reaction="bad">合わなかった</button></div><p id="reactionSaved" class="reaction-saved hidden">好みに反映しました ✦</p></section><section class="where"><small id="whereEyebrow">WHERE TO WATCH</small><h3 id="whereTitle">どこで観る？</h3><div class="watch-tabs"><button class="selected" data-watch="stream">配信</button><button data-watch="rent">レンタル</button><button data-watch="theater">映画館</button></div><div id="watchPanel" class="watch-panel"></div><p class="watch-credit">配信情報はTMDb / JustWatch提供情報を参照しています。最新状況は各サービスでご確認ください。</p></section><section class="after"><small>AFTER DROP</small><h3>観たあとも、映画を楽しむ。</h3><p>この作品から、もう少し世界を広げる。</p><div class="goods info-goods">
@@ -102,6 +102,10 @@
    if((p.services||[]).length)parts.push(p.services[0]+"で観ることも意識");
    return parts.length?parts.join("・")+"選んだ一本です。":(x.overview||"今の気分に合う一本です。");
  }
+ function watchedEntries(){try{return JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}")}catch(e){return{}}}
+ function isWatchedMovie(m){if(!m)return false;let hist=watchedEntries(),title=String(m.title||"").trim().toLowerCase();return Object.entries(hist).some(([k,v])=>(v&&v.movie&&v.movie.id&&m.id&&String(v.movie.id)===String(m.id))||String(k).trim().toLowerCase()===title)}
+ function withoutWatched(a){return (a||[]).filter(x=>!isWatchedMovie(x))}
+
  function applyMovie(x){currentMovie=x;renderRec()}
  function renderRec(){
   let x=recItems[recIndex]||currentMovie;if(!x)return;currentMovie=x;
@@ -186,19 +190,7 @@
   sub.querySelectorAll("[data-rec]").forEach(b=>b.onclick=()=>{currentMovie=recs[+b.dataset.rec];openCurrentDetail()});
  }
  renderRecentMovies();
- async function recommendForProfile(q){
-   try{
-    let p=loadProfile(),terms=q?[q]:[...(p.tastes||[]).slice(0,3),...(p.favorites||[]).slice(0,2),profileQuery()].filter(Boolean);
-    let requests=[fetch("/api/search?mode=latest").then(r=>r.json())].concat(terms.map(t=>fetch("/api/search?q="+encodeURIComponent(t)).then(r=>r.json()).catch(()=>({results:[]}))));
-    let sets=await Promise.all(requests),pool=sets.flatMap(d=>d.results||[]),seen=new Set(),avoid=p.avoid||[];
-    let items=withoutWatched(pool).filter(x=>x.type==="movie"&&x.poster&&!seen.has(x.id)&&(seen.add(x.id)||true));
-    const bad=x=>{let s=(x.title+" "+(x.overview||"")).toLowerCase();return (avoid.includes("怖すぎる映画")&&/ホラー|恐怖|殺人|悪霊/.test(s))||(avoid.includes("残酷な描写")&&/残酷|猟奇|殺人|血/.test(s))||(avoid.includes("恋愛中心")&&/恋愛|ラブストーリー/.test(s))||(avoid.includes("子ども向け")&&/キッズ|子ども|児童/.test(s))};
-    const score=x=>{let s=0,txt=(x.title+" "+(x.overview||"")).toLowerCase();(p.tastes||[]).forEach(t=>{if(txt.includes(t.toLowerCase()))s+=5});terms.forEach(t=>{if(txt.includes(String(t).toLowerCase()))s+=3});if((p.watchStyle||[]).includes("新作中心"))s+=Math.max(0,(+(String(x.date||"").slice(0,4))||0)-2020);if((p.watchStyle||[]).includes("旧作も好き")&&+(String(x.date||"").slice(0,4))<2000)s+=4;s+=Math.min(4,Number(x.rating||0)/2);return s};
-    items=items.filter(x=>!bad(x)).sort((a,b)=>score(b)-score(a)).slice(0,10);
-    let hist=JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}"),badTitles=Object.keys(hist).filter(k=>hist[k].reaction==="bad");
-    recItems=items.filter(m=>!badTitles.includes(m.title)).slice(0,10);recIndex=0;if(recItems.length){currentMovie=recItems[0];renderRec()}
-   }catch(e){}
- }
+ function recommendForProfile(){return refreshRecommendationTen({profile:true})}
  function homeSections(on){[".dual-hero",".moods",".era-filter",".recommend-section"].forEach(q=>{let e=document.querySelector(q);if(e)e.style.display=on?"":"none"});let a=document.querySelector(".afterdrop-home");if(a)a.style.display=on?"":"none"}
  function fallbackPage(page){
   let sub=$("subpage");if(!sub)return;
@@ -212,10 +204,7 @@
   window.scrollTo(0,0);
   if(page==="mypage"&&$("openDropArchive"))$("openDropArchive").onclick=e=>{e.preventDefault();e.stopPropagation();renderArchive("cinemadrop")};
   if(page==="mypage"&&$("openPastArchive"))$("openPastArchive").onclick=e=>{e.preventDefault();e.stopPropagation();renderArchive("past",true)};
- function watchedEntries(){try{return JSON.parse(localStorage.getItem("cinemaDropHistory")||"{}")}catch(e){return{}}}
- function isWatchedMovie(m){if(!m)return false;let hist=watchedEntries(),title=String(m.title||"").trim().toLowerCase();return Object.entries(hist).some(([k,v])=>(v&&v.movie&&v.movie.id&&m.id&&String(v.movie.id)===String(m.id))||String(k).trim().toLowerCase()===title)}
- function withoutWatched(a){return (a||[]).filter(x=>!isWatchedMovie(x))}
- 
+
 function showPastReactionPicker(key,m){let sub=$("subpage"),h=watchedEntries();sub.innerHTML='<div class="past-reaction"><small>PAST MOVIES</small><h2>この映画、どうだった？</h2>'+(m.poster?'<img src="'+m.poster+'" alt="">':'')+'<h3>'+m.title+'</h3><p>覚えていれば選んでください。スキップしても登録できます。</p><div class="past-reaction-options"><button data-pr="love">大好き</button><button data-pr="good">好き</button><button data-pr="okay">ふつう</button><button data-pr="bad">イマイチ</button><button data-pr="dislike">嫌い</button></div><button id="pastReactionSkip" class="past-reaction-skip">今は選ばない →</button></div>';sub.querySelectorAll("[data-pr]").forEach(b=>b.onclick=()=>{let x=h[key];if(x){x.reaction=b.dataset.pr;localStorage.setItem("cinemaDropHistory",JSON.stringify(h))}renderArchive("past")});$("pastReactionSkip").onclick=()=>renderArchive("past")}
 function renderArchive(initialSource="cinemadrop",openAdd=false){
   homeSections(false);let sub=$("subpage");sub.classList.remove("hidden"),hist=watchedEntries();
@@ -266,29 +255,65 @@ function renderArchive(initialSource="cinemadrop",openAdd=false){
  document.querySelectorAll(".watch-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".watch-tabs button").forEach(x=>x.classList.toggle("selected",x===b));renderDetailWatch(b.dataset.watch)},true));
  
  $("heroRecommend")?.addEventListener("click",()=>{if(recItems.length){recIndex=0;currentMovie=recItems[0];openCurrentDetail()}else recommendForProfile()});
+ let recommendationRequest=0;
+ let recommendationFilter={mood:"",era:"latest",newest:true};
  async function refreshRecommendationTen(opts={}){
-  const mood=opts.mood||"",oldIds=new Set((recItems||[]).map(x=>String(x.id))),get=async u=>{try{let r=await fetch(u+(u.includes("?")?"&":"?")+"t="+Date.now());if(!r.ok)return[];let d=await r.json();return d.results||[]}catch(e){return[]}};
-  let pools=await Promise.all(mood?[get("/api/search?mood="+encodeURIComponent(mood)),get("/api/search?mode=latest"),get("/api/search?mode=streaming")]:[get("/api/search?mode=latest"),get("/api/search?mode=streaming"),get("/api/search?q="+encodeURIComponent(["映画","ドラマ","アクション","コメディ"][(window.cinemaDropCycle=(window.cinemaDropCycle||0)+1)%4]))]);
-  let seen=new Set(),all=withoutWatched(pools.flat()).filter(x=>x.type==="movie"&&x.poster&&!seen.has(String(x.id))&&(seen.add(String(x.id))||true));
-  let fresh=all.filter(x=>!oldIds.has(String(x.id))),rest=all.filter(x=>oldIds.has(String(x.id)));
-  fresh.sort(()=>Math.random()-.5);rest.sort(()=>Math.random()-.5);
-  let items=fresh.concat(rest).slice(0,10);if(!items.length)return false;
-  recItems=items;recIndex=0;currentMovie=items[0];window.cinemaDropTenLocked=true;renderRec();return true
-} window.cinemaDropRefreshTen=refreshRecommendationTen; window.cinemaDropForceRecommend=async function(mood){window.cinemaDropMoodActive=mood||"drop";window.cinemaDropTenLocked=true;if(mood){document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x.dataset.mood===mood));window.cinemaDropMoodHero?.(mood)}await refreshRecommendationTen({mood:mood||""});return false};
+  if(opts.profile && recItems.length){renderRec();return true}
+  recommendationFilter={...recommendationFilter,...opts};
+  const {mood,era,newest}=recommendationFilter,request=++recommendationRequest;
+  const row=$("pickupRow"),oldIds=new Set(recItems.map(x=>String(x.id)));
+  row?.setAttribute("aria-busy","true");
+  let status=$("recommendStatus");
+  if(!status){status=document.createElement("p");status.id="recommendStatus";status.setAttribute("role","status");row?.before(status)}
+  status.textContent="おすすめを選んでいます…";
+  const get=async u=>{const r=await fetch(u);if(!r.ok)throw new Error("RECOMMEND_FETCH_FAILED");const d=await r.json();return d.results||[]};
+  try{
+   // Mood and decade results must not be mixed with unrelated current releases.
+   let urls=mood?["/api/search?mood="+encodeURIComponent(mood)]:era!=="latest"?["/api/search?memory="+encodeURIComponent("映画")+"&year="+(era==="pre1990"?"1980s":era+"s")]:["/api/search?mode=latest","/api/search?mode=streaming"];
+   if(era==="pre1990"&&!mood)urls.push("/api/search?memory="+encodeURIComponent("映画")+"&year=1970s");
+   if(!mood&&era==="latest"&&!newest)urls.push("/api/search?q="+encodeURIComponent(profileQuery()));
+   const pools=await Promise.allSettled(urls.map(get));
+   if(request!==recommendationRequest)return false;
+   if(pools.every(x=>x.status==="rejected"))throw new Error("RECOMMEND_FETCH_FAILED");
+   let seen=new Set(),profile=loadProfile(),avoid=profile.avoid||[];
+   let all=withoutWatched(pools.flatMap(x=>x.status==="fulfilled"?x.value:[])).filter(x=>{
+    if(x.type!=="movie"||!x.poster||seen.has(String(x.id)))return false;
+    seen.add(String(x.id));
+    const year=Number(String(x.date||"").slice(0,4));
+    if(era!=="latest"&&!(era==="pre1990"?year>0&&year<1990:year>=Number(era)&&year<Number(era)+10))return false;
+    const text=x.title+" "+(x.overview||"");
+    return !((avoid.includes("怖すぎる映画")&&/ホラー|恐怖|殺人|悪霊/.test(text))||(avoid.includes("残酷な描写")&&/残酷|猟奇|殺人|血/.test(text))||(avoid.includes("恋愛中心")&&/恋愛|ラブストーリー/.test(text))||(avoid.includes("子ども向け")&&/キッズ|子ども|児童/.test(text)));
+   });
+   const order=(a,b)=>newest?String(b.date||"").localeCompare(String(a.date||"")):Number(b.rating||0)-Number(a.rating||0);
+   const fresh=all.filter(x=>!oldIds.has(String(x.id))).sort(order),rest=all.filter(x=>oldIds.has(String(x.id))).sort(order);
+   recItems=fresh.concat(rest).slice(0,10);recIndex=0;
+   if(recItems.length){currentMovie=recItems[0];renderRec();status.textContent=recItems.length<10?"条件に合う"+recItems.length+"本を表示しています。":""}
+   else{row.replaceChildren();status.textContent="条件に合う未視聴の映画がありません。気分や年代を変えてみてください。"}
+   return true;
+  }catch(error){
+   if(request===recommendationRequest)status.textContent="おすすめを取得できませんでした。もう一度DROPを押してください。";
+   return false;
+  }finally{if(request===recommendationRequest)row?.setAttribute("aria-busy","false")}
+ }
+ window.cinemaDropRefreshTen=refreshRecommendationTen;
+ window.cinemaDropForceRecommend=async function(mood){
+  document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.toggle("selected",x.dataset.mood===mood));
+  if(mood)window.cinemaDropMoodHero?.(mood);
+  // DROP from another page returns to the recommendation list.
+  $("detail")?.classList.add("hidden");$("home")?.classList.remove("hidden");
+  document.querySelector(".detail-nav-fixed")?.classList.remove("show");
+  $("subpage")?.classList.add("hidden");homeSections(true);
+  await refreshRecommendationTen({mood:mood||""});return false;
+ };
  
  $("comingCard")?.addEventListener("click",openCurrentDetail); $("allRecommend")?.addEventListener("click",()=>document.querySelector(".poster-strip")?.scrollIntoView({behavior:"smooth"}));
- $("moodReset")?.addEventListener("click",()=>{window.cinemaDropMoodActive="";window.cinemaDropTenLocked=false;document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));recommendForProfile();window.cinemaDropMoodHero?.()});
+ $("moodReset")?.addEventListener("click",()=>{document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));refreshRecommendationTen({mood:""});window.cinemaDropMoodHero?.()});
 
 })();</script><script>
 (function(){
 let era="latest",newest=true;
-const yr=x=>{let m=String(x&&x.date||"").match(/[12][0-9][0-9][0-9]/);return Number(m?m[0]:0)};
-const pass=y=>era==="pre1990"?y&&y<1990:era==="1990"?y>=1990&&y<2000:era==="2000"?y>=2000&&y<2010:era==="2010"?y>=2010&&y<2020:era==="2020"?y>=2020&&y<2030:y>=2024;
-async function go(){if(window.cinemaDropMoodActive||window.cinemaDropTenLocked)return;let all=[];if(era==="latest"){try{let r=await fetch("/api/search?mode=latest"),d=await r.json();all=d.results||[]}catch(e){}}else{for(let q of ["映画"]){try{let r=await fetch("/api/search?q="+encodeURIComponent(q)),d=await r.json();all=all.concat(d.results||[])}catch(e){}}}
-let seen=new Set(),a=all.filter(x=>x.type==="movie"&&pass(yr(x))&&!seen.has(x.id)&&(seen.add(x.id)||true));if(newest)a.sort((x,y)=>yr(y)-yr(x));
-let row=document.getElementById("pickupRow"),shown=a.slice(0,10);if(row){row.innerHTML=shown.map(x=>'<button class="era-card"><span style="background-image:url('+x.poster+')"></span><b>'+x.title+'</b><small>'+yr(x)+'</small></button>').join("");row.querySelectorAll(".era-card").forEach((b,i)=>b.onclick=()=>window.cinemaDropOpenDetail?.(shown[i]))}
-let x=a[0],t=document.getElementById("comingTitle"),v=document.querySelector(".theater-visual");if(x&&t)t.textContent=x.title;if(x&&v&&x.poster)v.style.backgroundImage='url("'+x.poster+'")'}
-document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("click",()=>{if(newest)return;era=b.dataset.era;document.querySelectorAll("#eraTabs button").forEach(z=>z.classList.toggle("selected",z===b));go()}));let sw=document.getElementById("latestFirst");function syncEraUI(){let tabs=document.getElementById("eraTabs");if(tabs)tabs.classList.toggle("disabled",newest);document.querySelectorAll("#eraTabs button").forEach(z=>{z.classList.toggle("selected",!newest&&z.dataset.era===era);z.disabled=newest})}if(sw)sw.addEventListener("change",()=>{newest=sw.checked;if(newest)era="latest";syncEraUI();go()});syncEraUI();setTimeout(go,350)
+function go(){return window.cinemaDropRefreshTen({era,newest})}
+document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("click",()=>{if(newest)return;era=b.dataset.era;document.querySelectorAll("#eraTabs button").forEach(z=>z.classList.toggle("selected",z===b));go()}));let sw=document.getElementById("latestFirst");function syncEraUI(){let tabs=document.getElementById("eraTabs");if(tabs)tabs.classList.toggle("disabled",newest);document.querySelectorAll("#eraTabs button").forEach(z=>{z.classList.toggle("selected",!newest&&z.dataset.era===era);z.disabled=newest})}if(sw)sw.addEventListener("change",()=>{newest=sw.checked;if(newest){era="latest";document.querySelectorAll(".mood-grid button").forEach(x=>x.classList.remove("selected"));window.cinemaDropRefreshTen({era,newest,mood:""})}else go();syncEraUI()});syncEraUI();setTimeout(go,350)
 })();
 </script><script>
 (function(){
@@ -333,7 +358,7 @@ document.querySelectorAll("#eraTabs button").forEach(b=>b.addEventListener("clic
 </script><nav class="detail-nav detail-nav-fixed">
 <button class="active" data-page="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H5V11"/><path d="M9 21v-6h6v6"/></svg><span>ホーム</span></button>
 <button data-page="search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><span>さがす</span></button>
-<button type="button" class="dropnav" data-drop-nav="1" onclick="window.cinemaDropForceRecommend('');window.cinemaDropRefresh();return false;"><i></i><span>DROP</span></button>
+<button type="button" class="dropnav" data-drop-nav="1" onclick="window.cinemaDropSkipTenOnce=true;window.cinemaDropForceRecommend('');window.cinemaDropRefresh();return false;"><i></i><span>DROP</span></button>
 <button data-page="list"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6a5.5 5.5 0 0 0 1-8.8z"/></svg><span>マイリスト</span></button>
 <button data-page="mypage"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 22c.5-5 3.2-8 8-8s7.5 3 8 8"/></svg><span>マイページ</span></button>
 </nav></body></html>
